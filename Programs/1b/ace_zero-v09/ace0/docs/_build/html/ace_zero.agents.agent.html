@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.agents.agent module &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ace_zero.agents.agent module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>ace_zero.agents.agent module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ace_zero.agents.agent.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ace_zero.agents.agent">
+<span id="ace-zero-agents-agent-module"></span><h1>ace_zero.agents.agent module<a class="headerlink" href="#module-ace_zero.agents.agent" title="Permalink to this headline">¶</a></h1>
+<p>Module containing classes required to implement agent models for the
+simulation.</p>
+<dl class="class">
+<dt id="ace_zero.agents.agent.Agent">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.agent.</code><code class="descname">Agent</code><span class="sig-paren">(</span><em>params_filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/agent.html#Agent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.agent.Agent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base class for all agents.</p>
+<p>This class defines the interface expected by the simulation engine when
+instantiating and executing agents. All agent implementations should
+extend this class.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>beliefs (Beliefs): object defining the agent beliefs about the world
+commands ([Command]): list of Commands from this agent</dd>
+</dl>
+<dl class="method">
+<dt id="ace_zero.agents.agent.Agent.get_commands">
+<code class="descname">get_commands</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/agent.html#Agent.get_commands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.agent.Agent.get_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current list of commands from the agent.</p>
+<p>This method is called by the simulation engine during execution to
+retrieve commands from the agent for other agents or for physical models
+in its associated entity. The default implementation returns the
+commands attribute of the agent. It may be extended or overridden to
+provide additional functionality.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>([object]): the list of commands; may be empty</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.agent.Agent.set_beliefs">
+<code class="descname">set_beliefs</code><span class="sig-paren">(</span><em>beliefs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/agent.html#Agent.set_beliefs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.agent.Agent.set_beliefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the percepts of the agent.</p>
+<p>This method is called by the simulation engine during execution, to
+update the agent with the current state of physical models in its
+associated entity. The default implementation sets the beliefs attribute
+of the agent. It may be extended or overridden to provide additional
+functionality.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>beliefs (object): object defining the agent beliefs about the world</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.agent.Agent.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/agent.html#Agent.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.agent.Agent.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ticks the StateAgent.</p>
+<p>This method is called by the simulation engine during execution to
+advance the agent a single time-step. It may be overridden to
+implement agent behaviour.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>t (int): current simulation time
+dt (float): change in time from previous tick</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+{
+    "plant_data_source_blue": "data/blue.json",
+    "plant_data_source_red": "data/red.json",
+    "maneuvers":
+        [
+            {
+                "name" : "Left Down",
+                "theta_c" : 1.0,
+                "psi_c" : -1.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetPitchAngleCmd", "SetHeadingCmd"]
+            },
+            {
+                "name" : "Left Up",
+                "theta_c" : -1.0,
+                "psi_c" : -1.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetPitchAngleCmd", "SetHeadingCmd"]
+            },
+            {
+                "name" : "Pull Up",
+                "theta_c" : -1.0,
+                "psi_c" : 0.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetPitchAngleCmd"]
+            },
+            {
+                "name" : "Level Flight",
+                "theta_c" : 0.0,
+                "psi_c" : 0.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetFlyLevelCmd"]
+            },
+            {
+                "name" : "Push Down",
+                "theta_c" : 1.0,
+                "psi_c" : 0.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetPitchAngleCmd"]
+            },
+            {
+                "name" : "Right Up",
+                "theta_c" : -1.0,
+                "psi_c" : 1.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetPitchAngleCmd", "SetHeadingCmd"]
+            },
+            {
+                "name" : "Right Down",
+                "theta_c" : 1.0,
+                "psi_c" : 1.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetPitchAngleCmd", "SetHeadingCmd"]
+            }
+        ]
+}

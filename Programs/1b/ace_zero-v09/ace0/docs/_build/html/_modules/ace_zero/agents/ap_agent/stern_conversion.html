@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.agents.ap_agent.stern_conversion &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../../index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      
+    <li>ace_zero.agents.ap_agent.stern_conversion</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ace_zero.agents.ap_agent.stern_conversion</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stern Conversion as Hybrid Planning</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;miquelramirez&#39;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">utils</span>
+<span class="kn">from</span> <span class="nn">agents.ap_agent.automated_planning_agent</span> <span class="k">import</span> <span class="n">AutomatedPlanningAgent</span>
+
+<span class="n">PLANNER_DIR</span> <span class="o">=</span> <span class="s1">&#39;/home/bowman/Sandboxes/fs-plus-new/generated/testing/stern_conversion_level_4/standard&#39;</span>
+
+<div class="viewcode-block" id="Maneuver"><a class="viewcode-back" href="../../../../ace_zero.agents.ap_agent.stern_conversion.html#ace_zero.agents.ap_agent.stern_conversion.Maneuver">[docs]</a><span class="k">class</span> <span class="nc">Maneuver</span> <span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta_c</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_c</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_c</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_c</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commands</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Maneuver.make_commands"><a class="viewcode-back" href="../../../../ace_zero.agents.ap_agent.stern_conversion.html#ace_zero.agents.ap_agent.stern_conversion.Maneuver.make_commands">[docs]</a>    <span class="k">def</span> <span class="nf">make_commands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plant</span><span class="p">)</span> <span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">commands</span>
+
+        <span class="n">cmd_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">theta_c</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">constrain_360</span><span class="p">(</span><span class="n">plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">theta</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta_c</span><span class="p">)</span>
+        <span class="n">psi_c</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">constrain_360</span><span class="p">(</span><span class="n">plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">psi</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_c</span><span class="p">)</span>
+        <span class="n">v_c</span> <span class="o">=</span> <span class="n">plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_c</span>
+        <span class="n">z_c</span> <span class="o">=</span> <span class="n">plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">z</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_c</span>
+        <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">commands</span> <span class="p">:</span>
+            <span class="n">cmd_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">commands</span><span class="p">,</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">cmd_class</span><span class="o">.</span><span class="n">_fields</span> <span class="p">:</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">locals</span><span class="p">()[</span><span class="n">a</span><span class="p">])</span>
+            <span class="n">cmd_instance</span> <span class="o">=</span> <span class="n">cmd_class</span><span class="o">.</span><span class="n">_make</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+            <span class="n">cmd_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmd_instance</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_list</span></div>
+
+<div class="viewcode-block" id="Maneuver.update"><a class="viewcode-back" href="../../../../ace_zero.agents.ap_agent.stern_conversion.html#ace_zero.agents.ap_agent.stern_conversion.Maneuver.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">plant</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="n">plant</span><span class="o">.</span><span class="n">set_new_commands</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_commands</span><span class="p">(</span><span class="n">plant</span><span class="p">))</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Maneuver.load"><a class="viewcode-back" href="../../../../ace_zero.agents.ap_agent.stern_conversion.html#ace_zero.agents.ap_agent.stern_conversion.Maneuver.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span> <span class="n">datasource</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Maneuver</span><span class="p">()</span>
+        <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;theta_c&#39;</span><span class="p">,</span> <span class="s1">&#39;psi_c&#39;</span><span class="p">,</span> <span class="s1">&#39;v_c&#39;</span><span class="p">,</span> <span class="s1">&#39;z_c&#39;</span><span class="p">,</span> <span class="s1">&#39;commands&#39;</span><span class="p">,</span> <span class="s1">&#39;control&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">attrib</span> <span class="ow">in</span> <span class="n">attributes</span> <span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span> <span class="n">m</span><span class="p">,</span> <span class="n">attrib</span><span class="p">,</span> <span class="n">datasource</span><span class="p">[</span><span class="n">attrib</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">transitions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">datasource</span><span class="p">[</span><span class="s2">&quot;transitions&quot;</span><span class="p">]</span> <span class="p">:</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">m</span></div></div>
+
+
+<div class="viewcode-block" id="SternConversionAgent"><a class="viewcode-back" href="../../../../ace_zero.agents.ap_agent.stern_conversion.html#ace_zero.agents.ap_agent.stern_conversion.SternConversionAgent">[docs]</a><span class="k">class</span> <span class="nc">SternConversionAgent</span><span class="p">(</span><span class="n">AutomatedPlanningAgent</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maneuver_specs</span><span class="p">):</span>
+        <span class="c1"># Set up logging</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;FS+ (Stern Conversion)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span> <span class="s1">&#39;fs_plus_stern_conversion.log&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(name)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_variable_schema</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">yaw_control_state</span> <span class="o">=</span> <span class="s2">&quot;straight&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pitch_control_state</span> <span class="o">=</span> <span class="s2">&quot;level&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed_control_state</span> <span class="o">=</span> <span class="s2">&quot;cruising&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_maneuver</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Load the manoeuvres and plant data sources from the specs file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">maneuver_specs</span><span class="p">)</span> <span class="k">as</span> <span class="n">instream</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">instream</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">SternConversionAgent</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;plant_data_source_blue&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;plant_data_source_red&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">maneuvers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup_maneuvers</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SternConversionAgent.setup_maneuvers"><a class="viewcode-back" href="../../../../ace_zero.agents.ap_agent.stern_conversion.html#ace_zero.agents.ap_agent.stern_conversion.SternConversionAgent.setup_maneuvers">[docs]</a>    <span class="k">def</span> <span class="nf">setup_maneuvers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">maneuvers</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">maneuver_data</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;maneuvers&#39;</span><span class="p">]:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">Maneuver</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">maneuver_data</span><span class="p">)</span>
+            <span class="n">maneuvers</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Loaded </span><span class="si">{}</span><span class="s2"> maneuvers from &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">maneuvers</span><span class="p">),</span> <span class="n">data</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">maneuvers</span></div>
+
+<div class="viewcode-block" id="SternConversionAgent.load_variable_schema"><a class="viewcode-back" href="../../../../ace_zero.agents.ap_agent.stern_conversion.html#ace_zero.agents.ap_agent.stern_conversion.SternConversionAgent.load_variable_schema">[docs]</a>    <span class="k">def</span> <span class="nf">load_variable_schema</span><span class="p">(</span><span class="bp">self</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">os</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vars</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PLANNER_DIR</span><span class="p">,</span> <span class="s1">&#39;data/problem.json&#39;</span><span class="p">)</span> <span class="p">)</span>  <span class="k">as</span> <span class="n">instream</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">instream</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;variables&quot;</span><span class="p">]</span> <span class="p">:</span>
+            <span class="n">init_index</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">]))</span> <span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">variable</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="p">:</span>
+                    <span class="n">init_index</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="k">break</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="n">variable</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">variable</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">init_index</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">object_def</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;objects&quot;</span><span class="p">]</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">object_def</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">object_def</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SternConversionAgent.update_initial_state"><a class="viewcode-back" href="../../../../ace_zero.agents.ap_agent.stern_conversion.html#ace_zero.agents.ap_agent.stern_conversion.SternConversionAgent.update_initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">update_initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">os</span>
+        <span class="c1"># Update blue plant state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;x(blue)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;y(blue)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;z(blue)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;v(blue)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">v</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;psi(blue)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">psi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;theta(blue)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">theta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;speed_control_state(blue)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">speed_control_state</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;yaw_control_state(blue)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">yaw_control_state</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;pitch_control_state(blue)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pitch_control_state</span><span class="p">]</span>
+        <span class="c1">#self.problem[&quot;init&quot;][&quot;atoms&quot;][self.vars[&quot;phi(blue)&quot;][1]][1] = self.blue_plant.platform.phi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Updating initial state to:&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">x(blue)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">y(blue)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">z(blue)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">z</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">v(blue)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">v</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">psi(blue)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">psi</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">theta(blue)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">theta</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">speed_control_state(blue)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speed_control_state</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">yaw_control_state(blue)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yaw_control_state</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">pitch_control_state(blue)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pitch_control_state</span><span class="p">))</span>
+
+        <span class="c1"># Update red plant state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;x(red)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">red_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;y(red)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">red_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;z(red)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">red_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;v(red)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">red_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">v</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;psi(red)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">red_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">psi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">][</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="s2">&quot;theta(red)&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">red_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">theta</span>
+        <span class="c1">#self.problem[&quot;init&quot;][&quot;atoms&quot;][self.vars[&quot;phi(red)&quot;][1]][1] = self.red_plant.platform.phi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">x(red)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">red_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">y(red)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">red_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">z(red)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">red_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">z</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">v(red)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">red_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">v</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">psi(red)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">red_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">psi</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">theta(red)=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">red_plant</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">theta</span><span class="p">))</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PLANNER_DIR</span><span class="p">,</span> <span class="s1">&#39;data/problem.json&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span> <span class="p">)</span> <span class="k">as</span> <span class="n">outstream</span> <span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span> <span class="n">outstream</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SternConversionAgent.invoke_planner"><a class="viewcode-back" href="../../../../ace_zero.agents.ap_agent.stern_conversion.html#ace_zero.agents.ap_agent.stern_conversion.SternConversionAgent.invoke_planner">[docs]</a>    <span class="k">def</span> <span class="nf">invoke_planner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">os</span>
+        <span class="n">planner_cmd</span> <span class="o">=</span> <span class="s1">&#39;./solver.bin -s 0.5 -H 1&#39;</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span> <span class="n">PLANNER_DIR</span> <span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span> <span class="n">planner_cmd</span> <span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PLANNER_DIR</span><span class="p">,</span> <span class="s1">&#39;results.json&#39;</span><span class="p">)</span> <span class="p">)</span>  <span class="k">as</span> <span class="n">instream</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">planner_result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">instream</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SternConversionAgent.make_commands_from_plan"><a class="viewcode-back" href="../../../../ace_zero.agents.ap_agent.stern_conversion.html#ace_zero.agents.ap_agent.stern_conversion.SternConversionAgent.make_commands_from_plan">[docs]</a>    <span class="k">def</span> <span class="nf">make_commands_from_plan</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">plant</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="n">executable_entries</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Plan:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">planner_result</span><span class="p">[</span><span class="s2">&quot;plan&quot;</span><span class="p">]</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">0.01</span> <span class="p">:</span>
+                <span class="n">executable_entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> actions in the plan out of </span><span class="si">{}</span><span class="s2"> can be executed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">executable_entries</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">planner_result</span><span class="p">[</span><span class="s2">&quot;plan&quot;</span><span class="p">])))</span>
+
+        <span class="n">command_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">executable_entries</span> <span class="p">:</span>
+            <span class="k">try</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_maneuver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maneuvers</span><span class="p">[</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">]]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span> <span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">command_list</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_maneuver</span><span class="o">.</span><span class="n">make_commands</span><span class="p">(</span> <span class="n">plant</span> <span class="p">)</span>
+            <span class="c1"># determine what control state needs to be updated</span>
+            <span class="n">attrib_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_control_state&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_maneuver</span><span class="o">.</span><span class="n">control</span><span class="p">)</span>
+            <span class="n">old_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attrib_name</span><span class="p">)</span>
+            <span class="n">next_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_maneuver</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">old_value</span><span class="p">]</span>
+            <span class="nb">setattr</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">attrib_name</span><span class="p">,</span> <span class="n">next_value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Control state transition: </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1"> -&gt; </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_maneuver</span><span class="o">.</span><span class="n">control</span><span class="p">,</span> <span class="n">old_value</span><span class="p">,</span> <span class="n">next_value</span><span class="p">))</span>
+
+
+
+        <span class="k">return</span> <span class="n">command_list</span></div>
+
+<div class="viewcode-block" id="SternConversionAgent.tick"><a class="viewcode-back" href="../../../../ace_zero.agents.ap_agent.stern_conversion.html#ace_zero.agents.ap_agent.stern_conversion.SternConversionAgent.tick">[docs]</a>    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> Empty plan&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_initial_state</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">invoke_planner</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">commands</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_commands_from_plan</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue_plant</span> <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

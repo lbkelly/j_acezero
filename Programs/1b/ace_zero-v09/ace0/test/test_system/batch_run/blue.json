@@ -1,0 +1,20 @@
+{
+    "phi": 0.0, 
+    "psi": 0.0, 
+    "theta": 0.0, 
+    "weight": 100.0, 
+    "metric": "Imperial/Nautical", 
+    "theta_K": 0.005, 
+    "side": 1, 
+    "v_max": 1000, 
+    "fuel": 100.0, 
+    "psi_K": 10.0, 
+    "callsign": "viper", 
+    "v": 300.0, 
+    "y": 4, 
+    "x": -2, 
+    "z": 10000.0, 
+    "id": 0, 
+    "v_min": 100, 
+    "v_K": 0.1
+}

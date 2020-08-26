@@ -1,0 +1,24 @@
+{
+    "name" : "Stern Conversion",
+    "tmin" : 0.0,
+    "umpire" : {
+            "triggers" : [
+                    {   "class" : "umpires.triggers.MaxTimeElapsed",
+                        "parameters" : { "max_time" : 80.0 }
+                    }
+                ],
+                "critics" : []
+    },
+    "dt" : 0.1,
+    "blue" : {
+        "initial" : "data/scenarios/park/blue_scenario_1.json",
+        "agent_class" : "agents.ap_agent.stern_conversion.agent.SternConversionAgent",
+        "agent_parameters": [ "data/scenarios/park/blue_scenario_1.json", "data/scenarios/park/red_scenario_1.json" ]
+    },
+
+    "red" : {
+        "initial" : "data/scenarios/park/red_scenario_1.json",
+        "agent_class" : "agents.diff_game_agent.park_stern_conversion.SternConversionAgent",
+        "agent_parameters" : [ "data/scenarios/park/red_scenario_1.json", "data/scenarios/park/blue_scenario_1.json", "data/park_maneuvers.json" ]
+    }
+}

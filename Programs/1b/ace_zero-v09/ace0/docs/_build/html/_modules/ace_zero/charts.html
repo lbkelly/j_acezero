@@ -1,0 +1,409 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.charts &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>ace_zero.charts</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ace_zero.charts</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Plotting routines for debugging and visualisation.</span>
+<span class="sd">This module contains function for plotting the traces of aircraft using matplotlib.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;mikepsn&#39;</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">mpl_toolkits.mplot3d</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<div class="viewcode-block" id="draw_trajectories"><a class="viewcode-back" href="../../ace_zero.charts.html#ace_zero.charts.draw_trajectories">[docs]</a><span class="k">def</span> <span class="nf">draw_trajectories</span><span class="p">(</span><span class="n">trace1</span><span class="p">,</span> <span class="n">trace2</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;1v1 WVR Air Combat&#39;</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x(object)&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y(object)&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;z(object)&#39;</span><span class="p">)</span>
+
+    <span class="n">ta1</span><span class="p">,</span> <span class="n">xa1</span><span class="p">,</span> <span class="n">ya1</span><span class="p">,</span> <span class="n">za1</span> <span class="o">=</span> <span class="p">([],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[])</span>
+    <span class="k">for</span> <span class="n">timeslice</span> <span class="ow">in</span> <span class="n">trace1</span><span class="p">:</span>
+        <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">fuel</span> <span class="o">=</span> <span class="n">timeslice</span>
+        <span class="n">ta1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">xa1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">ya1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">za1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+    <span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">xa1</span><span class="p">)</span>
+    <span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">xa1</span><span class="p">)</span>
+    <span class="n">ymin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">xa1</span><span class="p">)</span>
+    <span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ya1</span><span class="p">)</span>
+    <span class="n">zmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">za1</span><span class="p">)</span>
+    <span class="n">zmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">za1</span><span class="p">)</span>
+
+    <span class="n">ta2</span><span class="p">,</span> <span class="n">xa2</span><span class="p">,</span> <span class="n">ya2</span><span class="p">,</span> <span class="n">za2</span> <span class="o">=</span> <span class="p">([],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[])</span>
+    <span class="k">for</span> <span class="n">timeslice</span> <span class="ow">in</span> <span class="n">trace2</span><span class="p">:</span>
+        <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">fuel</span> <span class="o">=</span> <span class="n">timeslice</span>
+        <span class="n">ta2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">xa2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">ya2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">za2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+    <span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">xa2</span><span class="p">),</span> <span class="n">xmin</span><span class="p">)</span>
+    <span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">xa2</span><span class="p">),</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="n">ymin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">ya2</span><span class="p">),</span> <span class="n">xmin</span><span class="p">)</span>
+    <span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">ya2</span><span class="p">),</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">zmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">za2</span><span class="p">),</span> <span class="n">zmin</span><span class="p">)</span>
+    <span class="n">zmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">za2</span><span class="p">),</span> <span class="n">zmax</span><span class="p">)</span>
+
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span><span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">(</span><span class="n">zmin</span><span class="p">,</span><span class="n">zmax</span><span class="p">)</span>
+
+        <span class="c1"># Plot Trajectories</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xa1</span><span class="p">,</span> <span class="n">ya1</span><span class="p">,</span> <span class="n">za1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xa2</span><span class="p">,</span> <span class="n">ya2</span><span class="p">,</span> <span class="n">za2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Draw t=0.0 marker for trace1</span>
+    <span class="c1">#ax.text(xa1[0], ya1[0], za1[0]+1, &quot;t = %2.1f&quot; % ta1[0], color=&#39;b&#39;, alpha=0.5)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xa1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ya1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">za1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="c1"># and now trace2</span>
+    <span class="c1">#ax.text(xa2[0], ya2[0], za2[0]+1, &quot;t = %2.1f&quot; % ta2[0], color=&#39;r&#39;, alpha=0.5)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xa2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ya2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">za2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="c1"># Draw t=tmax marker for trace1</span>
+    <span class="c1">#ax.text(xa1[-1], ya1[-1], za1[-1]+1, &quot;t = %2.1f&quot; % ta1[-1], color=&#39;b&#39;, alpha=0.5)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xa1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">ya1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">za1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="c1"># and now for trace 2</span>
+    <span class="c1">#ax.text(xa2[-1], ya2[-1], za2[-1]+1, &quot;t = %2.1f&quot; % ta2[-1], color=&#39;r&#39;, alpha=0.5)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xa2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">ya2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">za2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="draw_platform_trace"><a class="viewcode-back" href="../../ace_zero.charts.html#ace_zero.charts.draw_platform_trace">[docs]</a><span class="k">def</span> <span class="nf">draw_platform_trace</span><span class="p">(</span><span class="n">trace</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Plots the trajectory of a single platform model over time.&quot;&quot;&quot;</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Platform Trajectory: (</span><span class="si">%s</span><span class="s2">)</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+                                                    <span class="n">platform</span><span class="o">.</span><span class="n">platform</span><span class="p">(),</span>
+                                                    <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+    <span class="n">ta</span><span class="p">,</span> <span class="n">xa</span><span class="p">,</span> <span class="n">ya</span><span class="p">,</span> <span class="n">za</span> <span class="o">=</span> <span class="p">([],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[])</span>
+    <span class="k">for</span> <span class="n">timeslice</span> <span class="ow">in</span> <span class="n">trace</span><span class="p">:</span>
+        <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">fuel</span> <span class="o">=</span> <span class="n">timeslice</span>
+        <span class="c1">#print (t, x, y, z), type(z), type(za)</span>
+        <span class="n">ta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">xa</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">ya</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">za</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xa</span><span class="p">,</span> <span class="n">ya</span><span class="p">,</span> <span class="n">za</span><span class="p">)</span>
+
+    <span class="c1">#ax.plot(xa, ya, zs=0.0, zdir=&#39;z&#39;, color=&#39;b&#39;, linestyle=&#39;--&#39;, alpha=0.5)</span>
+    <span class="c1">#ax.plot(xa, za, zs=0.0, zdir=&#39;y&#39;, color=&#39;r&#39;, linestyle=&#39;--&#39;, alpha=0.5)</span>
+    <span class="c1">#ax.plot(ya, za, zs=0.0, zdir=&#39;x&#39;, color=&#39;g&#39;, linestyle=&#39;--&#39;, alpha=0.5)</span>
+
+    <span class="c1">#ax.set_xlim([0.0, 200.0])</span>
+    <span class="c1">#ax.set_ylim([0.0, 200.0])</span>
+    <span class="c1">#ax.set_zlim([0.0, 200.0])</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xa</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ya</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">za</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;t = </span><span class="si">%2.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ta</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xa</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ya</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">za</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">ya</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">za</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;t = </span><span class="si">%2.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">ya</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">za</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+    <span class="c1">#plt.savefig(&#39;test_results/&#39; + filename)</span>
+
+
+<div class="viewcode-block" id="multiple_run_chart_3d"><a class="viewcode-back" href="../../ace_zero.charts.html#ace_zero.charts.multiple_run_chart_3d">[docs]</a><span class="k">def</span> <span class="nf">multiple_run_chart_3d</span><span class="p">(</span><span class="n">traces</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;1v1 WVR Air Combat: </span><span class="si">{}</span><span class="s2"> runs&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">traces</span><span class="p">))</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x(object)&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y(object)&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;z(object)&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">trace1</span><span class="p">,</span> <span class="n">trace2</span><span class="p">)</span> <span class="ow">in</span> <span class="n">traces</span><span class="p">:</span>
+        <span class="n">ta1</span><span class="p">,</span> <span class="n">xa1</span><span class="p">,</span> <span class="n">ya1</span><span class="p">,</span> <span class="n">za1</span> <span class="o">=</span> <span class="p">([],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">timeslice</span> <span class="ow">in</span> <span class="n">trace1</span><span class="p">:</span>
+            <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">fuel</span> <span class="o">=</span> <span class="n">timeslice</span>
+            <span class="n">ta1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">xa1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">ya1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">za1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+        <span class="c1"># xmin = min(xa1)</span>
+        <span class="c1"># xmax = max(xa1)</span>
+        <span class="c1"># ymin = min(xa1)</span>
+        <span class="c1"># ymax = max(ya1)</span>
+        <span class="c1"># zmin = min(za1)</span>
+        <span class="c1"># zmax = max(za1)</span>
+
+        <span class="n">ta2</span><span class="p">,</span> <span class="n">xa2</span><span class="p">,</span> <span class="n">ya2</span><span class="p">,</span> <span class="n">za2</span> <span class="o">=</span> <span class="p">([],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">timeslice</span> <span class="ow">in</span> <span class="n">trace2</span><span class="p">:</span>
+            <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">fuel</span> <span class="o">=</span> <span class="n">timeslice</span>
+            <span class="n">ta2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">xa2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">ya2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">za2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+        <span class="c1"># xmin = min(min(xa2), xmin)</span>
+        <span class="c1"># xmax = max(max(xa2), xmax)</span>
+        <span class="c1"># ymin = min(min(ya2), xmin)</span>
+        <span class="c1"># ymax = max(max(ya2), ymax)</span>
+        <span class="c1"># zmin = min(min(za2), zmin)</span>
+        <span class="c1"># zmax = max(max(za2), zmax)</span>
+
+
+    <span class="c1"># ax.set_xlim(xmin,xmax)</span>
+    <span class="c1"># ax.set_ylim(ymin,ymax)</span>
+    <span class="c1"># ax.set_zlim(zmin,zmax)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">15000</span><span class="p">)</span>
+
+        <span class="c1"># Plot Trajectories</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xa1</span><span class="p">,</span> <span class="n">ya1</span><span class="p">,</span> <span class="n">za1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xa2</span><span class="p">,</span> <span class="n">ya2</span><span class="p">,</span> <span class="n">za2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="c1">#     # Draw t=0.0 marker for trace1</span>
+        <span class="c1"># #ax.text(xa1[0], ya1[0], za1[0]+1, &quot;t = %2.1f&quot; % ta1[0], color=&#39;b&#39;, alpha=0.5)</span>
+        <span class="c1"># ax.scatter(xa1[0], ya1[0], za1[0], color=&#39;b&#39;, marker=&#39;o&#39;, s=100, alpha=0.5)</span>
+        <span class="c1">#     # and now trace2</span>
+        <span class="c1"># #ax.text(xa2[0], ya2[0], za2[0]+1, &quot;t = %2.1f&quot; % ta2[0], color=&#39;r&#39;, alpha=0.5)</span>
+        <span class="c1"># ax.scatter(xa2[0], ya2[0], za2[0], color=&#39;r&#39;, marker=&#39;o&#39;, s=100, alpha=0.5)</span>
+        <span class="c1">#</span>
+        <span class="c1">#     # Draw t=tmax marker for trace1</span>
+        <span class="c1"># #ax.text(xa1[-1], ya1[-1], za1[-1]+1, &quot;t = %2.1f&quot; % ta1[-1], color=&#39;b&#39;, alpha=0.5)</span>
+        <span class="c1"># ax.scatter(xa1[-1], ya1[-1], za1[-1], color=&#39;b&#39;, marker=&#39;*&#39;, s=100, alpha=0.5)</span>
+        <span class="c1">#     # and now for trace 2</span>
+        <span class="c1"># #ax.text(xa2[-1], ya2[-1], za2[-1]+1, &quot;t = %2.1f&quot; % ta2[-1], color=&#39;r&#39;, alpha=0.5)</span>
+        <span class="c1"># ax.scatter(xa2[-1], ya2[-1], za2[-1], color=&#39;r&#39;, marker=&#39;*&#39;, s=100, alpha=0.5)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="multiple_run_chart"><a class="viewcode-back" href="../../ace_zero.charts.html#ace_zero.charts.multiple_run_chart">[docs]</a><span class="k">def</span> <span class="nf">multiple_run_chart</span><span class="p">(</span><span class="n">traces</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;1v1 WVR Air Combat: </span><span class="si">{}</span><span class="s2"> runs&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">traces</span><span class="p">))</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x(object)&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y(object)&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">trace1</span><span class="p">,</span> <span class="n">trace2</span><span class="p">)</span> <span class="ow">in</span> <span class="n">traces</span><span class="p">:</span>
+        <span class="n">ta1</span><span class="p">,</span> <span class="n">xa1</span><span class="p">,</span> <span class="n">ya1</span> <span class="o">=</span> <span class="p">([],</span> <span class="p">[],</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">timeslice</span> <span class="ow">in</span> <span class="n">trace1</span><span class="p">:</span>
+            <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">fuel</span> <span class="o">=</span> <span class="n">timeslice</span>
+            <span class="n">ta1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">xa1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">ya1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="n">ta2</span><span class="p">,</span> <span class="n">xa2</span><span class="p">,</span> <span class="n">ya2</span> <span class="o">=</span> <span class="p">([],</span> <span class="p">[],</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">timeslice</span> <span class="ow">in</span> <span class="n">trace2</span><span class="p">:</span>
+            <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">fuel</span> <span class="o">=</span> <span class="n">timeslice</span>
+            <span class="n">ta2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">xa2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">ya2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="c1"># Plot Trajectories</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xa1</span><span class="p">,</span> <span class="n">ya1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xa2</span><span class="p">,</span> <span class="n">ya2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

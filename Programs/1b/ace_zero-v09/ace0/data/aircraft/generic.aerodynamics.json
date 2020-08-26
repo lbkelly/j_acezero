@@ -1,0 +1,9 @@
+{
+    "model" : "generic",
+    "metric" : "SI",
+    "v_min": 51.4,
+    "v_max": 514,
+    "v_K": 0.05,
+    "theta_K": 0.005,
+    "psi_K": 10.0
+}

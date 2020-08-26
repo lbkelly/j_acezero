@@ -1,0 +1,24 @@
+{
+    "name" : "Stern Conversion, FSM Blue Agent vs. Park's Differential Game Player",
+    "tmin" : 0.0,
+    "umpire" : {
+            "triggers" : [
+                    {   "class" : "umpires.triggers.MaxTimeElapsed",
+                        "parameters" : { "max_time" : 250.0 }
+                    }
+                ],
+            "critics" : []
+    },
+    "dt" : 0.1,
+    "blue" : {
+        "initial" : "data/blue.json",
+        "agent_class" : "agents.fsm_agent.stern_conversion.SternConversionAgent",
+        "agent_parameters": "data/blue_tactics.json"
+    },
+
+    "red" : {
+        "initial" : "data/red.json",
+        "agent_class" : "agents.diff_game_agent.park_stern_conversion.SternConversionAgent",
+        "agent_parameters" : "data/park_maneuvers.json"
+    }
+}

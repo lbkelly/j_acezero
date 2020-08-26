@@ -1,0 +1,22 @@
+{
+    "PureIntercept":
+    {
+        "TURN_RANGE": 2.374220317933176
+    },
+
+    "FlyRelativeBearing":
+    {
+        "TURN_ANGLE": 1552.0159538475007,
+        "DESIRED_DISPLACEMENT": 4939.772298191169
+    },
+
+    "FlyingOffset":
+    {
+        "CONVERSION_RANGE": -59.3159363863771
+    },
+
+    "Converting":
+    {
+        "NO_CLOSER_RANGE": -228.7959469438722
+    }
+}

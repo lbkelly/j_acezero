@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.agents.fsm_agent.state_agent module &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ace_zero.agents.fsm_agent.state_agent module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>ace_zero.agents.fsm_agent.state_agent module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ace_zero.agents.fsm_agent.state_agent.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ace_zero.agents.fsm_agent.state_agent">
+<span id="ace-zero-agents-fsm-agent-state-agent-module"></span><h1>ace_zero.agents.fsm_agent.state_agent module<a class="headerlink" href="#module-ace_zero.agents.fsm_agent.state_agent" title="Permalink to this headline">¶</a></h1>
+<p>This module contains classes required to implement an agent that uses a
+hierarchical finite state machine to represent decision making.</p>
+<dl class="class">
+<dt id="ace_zero.agents.fsm_agent.state_agent.StateAgent">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.fsm_agent.state_agent.</code><code class="descname">StateAgent</code><span class="sig-paren">(</span><em>states=[]</em>, <em>params_filename=None</em>, <em>initial=None</em>, <em>auto_initial=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/fsm_agent/state_agent.html#StateAgent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.fsm_agent.state_agent.StateAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">agents.agent.Agent</span></code></p>
+<p>Base class for agents implemented using a Finite State Machine.</p>
+<p>Objects of this class may contain child states, or be &#8216;leaf&#8217; states that
+execute behaviour and process state transitions.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd><p class="first">beliefs (Beliefs): the current agent beliefs about the world
+commands ([Command]): list of Commands from this agent and any children
+states ({class: StateAgent}): dict of child state objects by class
+params_filename (str): path to file specifying any agent parameters
+active_states ([StateAgent]): the list of states currently being</p>
+<blockquote>
+<div>executed by the agent</div></blockquote>
+<dl class="last docutils">
+<dt>transition_request (class): class of the state to transition into from</dt>
+<dd>this state</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="ace_zero.agents.fsm_agent.state_agent.StateAgent.add_active_state">
+<code class="descname">add_active_state</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/fsm_agent/state_agent.html#StateAgent.add_active_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.fsm_agent.state_agent.StateAgent.add_active_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a state to the list of active states.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.fsm_agent.state_agent.StateAgent.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/fsm_agent/state_agent.html#StateAgent.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.fsm_agent.state_agent.StateAgent.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the state behaviour.</p>
+<p>The default implementation clears the commands list then propagates
+execution to the current state by calling its execute method and
+retrieving any commands.</p>
+<p>Child agents should extend this method to carry out actions associated
+with the state behaviour. Commands should only be issued from this
+method, to ensure that they are not cleared during execution.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>t (int): current simulation time
+dt (float): change in time from previous tick</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.fsm_agent.state_agent.StateAgent.get_commands">
+<code class="descname">get_commands</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/fsm_agent/state_agent.html#StateAgent.get_commands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.fsm_agent.state_agent.StateAgent.get_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of commands from the agent and any active sub-states.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>([object]): the list of commands; may be empty</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.fsm_agent.state_agent.StateAgent.get_state">
+<code class="descname">get_state</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/fsm_agent/state_agent.html#StateAgent.get_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.fsm_agent.state_agent.StateAgent.get_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the state with the given class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.fsm_agent.state_agent.StateAgent.on_entry">
+<code class="descname">on_entry</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/fsm_agent/state_agent.html#StateAgent.on_entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.fsm_agent.state_agent.StateAgent.on_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the state is entered.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.fsm_agent.state_agent.StateAgent.on_exit">
+<code class="descname">on_exit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/fsm_agent/state_agent.html#StateAgent.on_exit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.fsm_agent.state_agent.StateAgent.on_exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the state is entered.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.fsm_agent.state_agent.StateAgent.process_state">
+<code class="descname">process_state</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/fsm_agent/state_agent.html#StateAgent.process_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.fsm_agent.state_agent.StateAgent.process_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes state transitions.</p>
+<p>The default implementation calls the process_state method in the current
+state, then checks whether a transition is requested and updates the
+current state accordingly.</p>
+<p>Child states should extend this method to implement state change
+logic. State transitions should only be requested in this method, by
+setting the transition_request attribute.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>t (int): current simulation time
+dt (float): change in time from previous tick</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.fsm_agent.state_agent.StateAgent.remove_active_state">
+<code class="descname">remove_active_state</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/fsm_agent/state_agent.html#StateAgent.remove_active_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.fsm_agent.state_agent.StateAgent.remove_active_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the state with the given class from the active states.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.fsm_agent.state_agent.StateAgent.set_beliefs">
+<code class="descname">set_beliefs</code><span class="sig-paren">(</span><em>beliefs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/fsm_agent/state_agent.html#StateAgent.set_beliefs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.fsm_agent.state_agent.StateAgent.set_beliefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the beliefs of the agent and all sub-states.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>beliefs (object): object defining the agent beliefs about the world</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.fsm_agent.state_agent.StateAgent.state_names">
+<code class="descname">state_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/fsm_agent/state_agent.html#StateAgent.state_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.fsm_agent.state_agent.StateAgent.state_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the names of the agent states.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.fsm_agent.state_agent.StateAgent.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/fsm_agent/state_agent.html#StateAgent.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.fsm_agent.state_agent.StateAgent.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ticks the StateAgent.</p>
+<p>This method calls the process_state and _execute methods.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>t (int): current simulation time
+dt (float): change in time from previous tick</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

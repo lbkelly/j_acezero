@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.utils &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>ace_zero.utils</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ace_zero.utils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Utility Functions</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.constants</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;mikepsn, lrbenke&#39;</span>
+
+
+<div class="viewcode-block" id="constrain_360"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.constrain_360">[docs]</a><span class="k">def</span> <span class="nf">constrain_360</span><span class="p">(</span><span class="n">angle</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Constrains the angle in degrees to (0, 360) &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fmod</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">+=</span> <span class="mi">360</span>
+    <span class="k">return</span> <span class="n">x</span></div>
+
+
+<div class="viewcode-block" id="constrain_180"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.constrain_180">[docs]</a><span class="k">def</span> <span class="nf">constrain_180</span><span class="p">(</span><span class="n">angle</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Constrains the angle in degrees to (-180, 180) &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fmod</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">angle</span> <span class="o">&gt;</span> <span class="mi">180</span><span class="p">:</span>
+        <span class="n">angle</span> <span class="o">-=</span> <span class="mi">360</span>
+    <span class="k">return</span> <span class="n">angle</span></div>
+
+
+<div class="viewcode-block" id="smallest_angle"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.smallest_angle">[docs]</a><span class="k">def</span> <span class="nf">smallest_angle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns the smallest angle between two angles including direction &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="o">+</span><span class="mi">360</span><span class="p">,</span> <span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="o">-</span><span class="mi">360</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">abs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="nautical_miles_to_metres"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.nautical_miles_to_metres">[docs]</a><span class="k">def</span> <span class="nf">nautical_miles_to_metres</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Converts nautical miles to metres &quot;&quot;&quot;</span>
+    <span class="n">nautical_mile</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">nautical_mile</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">nautical_mile</span></div>
+
+
+<div class="viewcode-block" id="metres_to_nautical_miles"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.metres_to_nautical_miles">[docs]</a><span class="k">def</span> <span class="nf">metres_to_nautical_miles</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Converts metres to nautical miles &quot;&quot;&quot;</span>
+    <span class="n">nautical_mile</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">nautical_mile</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">nautical_mile</span></div>
+
+
+<div class="viewcode-block" id="feet_to_metres"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.feet_to_metres">[docs]</a><span class="k">def</span> <span class="nf">feet_to_metres</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Converts feet to metres &quot;&quot;&quot;</span>
+    <span class="n">foot</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">foot</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">foot</span></div>
+
+
+<div class="viewcode-block" id="metres_to_feet"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.metres_to_feet">[docs]</a><span class="k">def</span> <span class="nf">metres_to_feet</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Converts metres to feet &quot;&quot;&quot;</span>
+    <span class="n">foot</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">foot</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">foot</span></div>
+
+
+<div class="viewcode-block" id="knots_to_mps"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.knots_to_mps">[docs]</a><span class="k">def</span> <span class="nf">knots_to_mps</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Converts knots to metres per second &quot;&quot;&quot;</span>
+    <span class="n">knot</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">knot</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">knot</span></div>
+
+
+<div class="viewcode-block" id="mps_to_knots"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.mps_to_knots">[docs]</a><span class="k">def</span> <span class="nf">mps_to_knots</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Converts metres per second to knots &quot;&quot;&quot;</span>
+    <span class="n">knot</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">knot</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">knot</span></div>
+
+
+<div class="viewcode-block" id="mps_to_mach"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.mps_to_mach">[docs]</a><span class="k">def</span> <span class="nf">mps_to_mach</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Converts speed from metres per second to mach number. &quot;&quot;&quot;</span>
+    <span class="n">mach</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">mach</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">/</span><span class="n">mach</span></div>
+
+
+<div class="viewcode-block" id="distance"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.distance">[docs]</a><span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Calculates the distance between two positions &quot;&quot;&quot;</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_location_vector"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.get_location_vector">[docs]</a><span class="k">def</span> <span class="nf">get_location_vector</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span> <span class="p">[</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]</span> <span class="p">]</span> <span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_velocity_vector"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.get_velocity_vector">[docs]</a><span class="k">def</span> <span class="nf">get_velocity_vector</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span><span class="n">obj</span><span class="o">.</span><span class="n">v</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">psi</span><span class="p">)),</span><span class="n">obj</span><span class="o">.</span><span class="n">v</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">psi</span><span class="p">)),</span><span class="n">obj</span><span class="o">.</span><span class="n">v</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">theta</span><span class="p">))]</span> <span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_range"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.get_range">[docs]</a><span class="k">def</span> <span class="nf">get_range</span><span class="p">(</span> <span class="n">obj1</span><span class="p">,</span> <span class="n">obj2</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="n">o1_loc</span> <span class="o">=</span> <span class="n">get_location_vector</span><span class="p">(</span> <span class="n">obj1</span> <span class="p">)</span>
+    <span class="n">o2_loc</span> <span class="o">=</span> <span class="n">get_location_vector</span><span class="p">(</span> <span class="n">obj2</span> <span class="p">)</span>
+    <span class="n">separation_vector</span> <span class="o">=</span> <span class="n">o1_loc</span> <span class="o">-</span> <span class="n">o2_loc</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">separation_vector</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_aspect_angle"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.get_aspect_angle">[docs]</a><span class="k">def</span> <span class="nf">get_aspect_angle</span><span class="p">(</span> <span class="n">obj1</span><span class="p">,</span> <span class="n">obj2</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="n">o1_loc</span> <span class="o">=</span> <span class="n">get_location_vector</span><span class="p">(</span> <span class="n">obj1</span> <span class="p">)</span>
+    <span class="n">o2_loc</span> <span class="o">=</span> <span class="n">get_location_vector</span><span class="p">(</span> <span class="n">obj2</span> <span class="p">)</span>
+    <span class="n">separation_vector</span> <span class="o">=</span> <span class="n">o1_loc</span> <span class="o">-</span> <span class="n">o2_loc</span>
+    <span class="n">velocity_vector</span> <span class="o">=</span> <span class="n">get_velocity_vector</span><span class="p">(</span><span class="n">obj2</span><span class="p">)</span>
+    <span class="n">cosine_taa</span> <span class="o">=</span> <span class="n">separation_vector</span> <span class="o">*</span> <span class="n">velocity_vector</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span> <span class="o">/</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">separation_vector</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">velocity_vector</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span> <span class="n">cosine_taa</span> <span class="p">))</span></div>
+
+<div class="viewcode-block" id="get_bearing_angle"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.get_bearing_angle">[docs]</a><span class="k">def</span> <span class="nf">get_bearing_angle</span><span class="p">(</span> <span class="n">obj1</span><span class="p">,</span> <span class="n">obj2</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="n">o1_loc</span> <span class="o">=</span> <span class="n">get_location_vector</span><span class="p">(</span> <span class="n">obj1</span> <span class="p">)</span>
+    <span class="n">o2_loc</span> <span class="o">=</span> <span class="n">get_location_vector</span><span class="p">(</span> <span class="n">obj2</span> <span class="p">)</span>
+    <span class="n">separation_vector</span> <span class="o">=</span> <span class="n">o1_loc</span> <span class="o">-</span> <span class="n">o2_loc</span>
+    <span class="n">velocity_vector</span> <span class="o">=</span> <span class="n">get_velocity_vector</span><span class="p">(</span><span class="n">obj1</span><span class="p">)</span>
+    <span class="n">cosine_ba</span> <span class="o">=</span> <span class="n">separation_vector</span> <span class="o">*</span> <span class="n">velocity_vector</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span> <span class="o">/</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">separation_vector</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">velocity_vector</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span> <span class="n">cosine_ba</span> <span class="p">))</span></div>
+
+<div class="viewcode-block" id="relative_bearing"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.relative_bearing">[docs]</a><span class="k">def</span> <span class="nf">relative_bearing</span><span class="p">(</span><span class="n">own_x</span><span class="p">,</span> <span class="n">own_y</span><span class="p">,</span> <span class="n">other_x</span><span class="p">,</span> <span class="n">other_y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Calculates the bearing from one position to another &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">constrain_360</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">other_y</span> <span class="o">-</span> <span class="n">own_y</span><span class="p">,</span> <span class="n">other_x</span> <span class="o">-</span> <span class="n">own_x</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="reciprocal_heading"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.reciprocal_heading">[docs]</a><span class="k">def</span> <span class="nf">reciprocal_heading</span><span class="p">(</span><span class="n">heading</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Calculates the reciprocal (anti-parallel) heading &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">constrain_360</span><span class="p">(</span><span class="n">heading</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="is_reciprocal"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.is_reciprocal">[docs]</a><span class="k">def</span> <span class="nf">is_reciprocal</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns True if the headings are reciprocal (at 180 degrees) &quot;&quot;&quot;</span>
+    <span class="n">relative_heading</span> <span class="o">=</span> <span class="n">constrain_360</span><span class="p">(</span><span class="n">h1</span> <span class="o">-</span> <span class="n">h2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">is_close</span><span class="p">(</span><span class="n">relative_heading</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="is_close"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.is_close">[docs]</a><span class="k">def</span> <span class="nf">is_close</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rel_tol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">09</span><span class="p">,</span> <span class="n">abs_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns True if a and b are close to within floating point error (can</span>
+<span class="sd">     be replaced by math.isclose() in Python 3.5+) &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">max</span><span class="p">(</span><span class="n">rel_tol</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">b</span><span class="p">)),</span> <span class="n">abs_tol</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="lateral_displacement"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.lateral_displacement">[docs]</a><span class="k">def</span> <span class="nf">lateral_displacement</span><span class="p">(</span><span class="n">own_x</span><span class="p">,</span> <span class="n">own_y</span><span class="p">,</span> <span class="n">threat_x</span><span class="p">,</span> <span class="n">threat_y</span><span class="p">,</span> <span class="n">threat_heading</span><span class="p">,</span>
+        <span class="n">threat_range</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns the perpendicular distance to the threat flight path using</span>
+<span class="sd">     the approximation `displacement(ft) = 100 * TAA(deg) * range(NM)` &quot;&quot;&quot;</span>
+    <span class="n">taa</span> <span class="o">=</span> <span class="n">target_aspect_angle</span><span class="p">(</span><span class="n">own_x</span><span class="p">,</span> <span class="n">own_y</span><span class="p">,</span> <span class="n">threat_x</span><span class="p">,</span> <span class="n">threat_y</span><span class="p">,</span> <span class="n">threat_heading</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">constrain_180</span><span class="p">(</span><span class="n">taa</span><span class="p">)</span> <span class="o">*</span> <span class="n">threat_range</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="target_aspect_angle"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.target_aspect_angle">[docs]</a><span class="k">def</span> <span class="nf">target_aspect_angle</span><span class="p">(</span><span class="n">own_x</span><span class="p">,</span> <span class="n">own_y</span><span class="p">,</span> <span class="n">threat_x</span><span class="p">,</span> <span class="n">threat_y</span><span class="p">,</span> <span class="n">threat_heading</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Calculates the target aspect angle (TAA) &quot;&quot;&quot;</span>
+    <span class="n">threat_bearing</span> <span class="o">=</span> <span class="n">relative_bearing</span><span class="p">(</span><span class="n">own_x</span><span class="p">,</span> <span class="n">own_y</span><span class="p">,</span> <span class="n">threat_x</span><span class="p">,</span> <span class="n">threat_y</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">reciprocal_heading</span><span class="p">(</span><span class="n">threat_bearing</span><span class="p">)</span> <span class="o">-</span> <span class="n">threat_heading</span></div>
+
+
+<div class="viewcode-block" id="is_angle_ccw"><a class="viewcode-back" href="../../ace_zero.utils.html#ace_zero.utils.is_angle_ccw">[docs]</a><span class="k">def</span> <span class="nf">is_angle_ccw</span><span class="p">(</span><span class="n">angle_1</span><span class="p">,</span> <span class="n">angle_2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns True if the shortest angle from angle_1 to angle_2 is</span>
+<span class="sd">    counter-clockwise &quot;&quot;&quot;</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">angle_2</span> <span class="o">-</span> <span class="n">angle_1</span>
+    <span class="k">return</span> <span class="n">diff</span> <span class="o">&gt;</span> <span class="mi">180</span> <span class="k">if</span> <span class="n">diff</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">diff</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">180</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

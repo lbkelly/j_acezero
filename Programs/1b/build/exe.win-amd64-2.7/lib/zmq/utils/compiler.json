@@ -1,0 +1,18 @@
+{
+  "extra_link_args": [], 
+  "define_macros": [], 
+  "runtime_library_dirs": [], 
+  "libraries": [
+    "libzmq"
+  ], 
+  "library_dirs": [
+    "C:/Users/jarry/Anaconda2\\Library\\lib"
+  ], 
+  "include_dirs": [
+    "buildutils\\include_win32", 
+    "C:/Users/jarry/Anaconda2\\Library\\include", 
+    "zmq\\utils", 
+    "zmq\\backend\\cython", 
+    "zmq\\devices"
+  ]
+}

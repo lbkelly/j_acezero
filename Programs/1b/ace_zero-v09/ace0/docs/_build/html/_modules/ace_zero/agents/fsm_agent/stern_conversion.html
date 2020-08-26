@@ -1,0 +1,496 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.agents.fsm_agent.stern_conversion &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../../index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      
+    <li>ace_zero.agents.fsm_agent.stern_conversion</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ace_zero.agents.fsm_agent.stern_conversion</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; This module contains subclasses of StateAgent that represent the discrete</span>
+<span class="sd">states in a stern conversion operation. The class SternConversionAgent should be</span>
+<span class="sd">initialised to generate a new stern conversion agent for execution. &quot;&quot;&quot;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;lrbenke&#39;</span>
+
+<span class="kn">from</span> <span class="nn">state_agent</span> <span class="k">import</span> <span class="n">StateAgent</span>
+<span class="kn">import</span> <span class="nn">utils</span> <span class="k">as</span> <span class="nn">ut</span>
+<span class="kn">from</span> <span class="nn">commands</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+
+<div class="viewcode-block" id="SternConversionAgent"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.SternConversionAgent">[docs]</a><span class="k">class</span> <span class="nc">SternConversionAgent</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class represents an agent that performs a stern conversion manoeuvre</span>
+<span class="sd">    against a target aircraft.</span>
+
+<span class="sd">    To execute a stern conversion correctly the aircraft must be in the forward</span>
+<span class="sd">    quarter of the threat aircraft at the beginning of the operation. If the</span>
+<span class="sd">    target aspect angle is too great the agent will not be able to achieve the</span>
+<span class="sd">    correct lateral separation to execute the manoeuvre.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params_filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates an agent that performs a stern conversion against a target</span>
+<span class="sd">        aircraft.</span>
+
+<span class="sd">        A new StateAgent is initialised with the states in this module. The</span>
+<span class="sd">        tactical parameters for each state may be set using a json file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params_filename (string): optional json file containing tactical</span>
+<span class="sd">              parameters to overwrite the default state parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (StateAgent): stern conversion state agent</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="n">PureIntercept</span><span class="p">(),</span> <span class="n">FlyRelativeBearing</span><span class="p">(),</span> <span class="n">FlyingOffset</span><span class="p">(),</span>
+                <span class="n">Converting</span><span class="p">(),</span> <span class="n">MatchAltitude</span><span class="p">()]</span>
+
+        <span class="c1"># Pre-fill tactical parameters if json file is defined</span>
+        <span class="k">if</span> <span class="n">params_filename</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">params_filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">:</span>
+                    <span class="n">state_classname</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span>
+                    <span class="k">if</span> <span class="n">state_classname</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                        <span class="c1"># Set parameters to the values defined in the json file</span>
+                        <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">state_classname</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                            <span class="nb">setattr</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="n">StateAgent</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span>
+                            <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="n">PureIntercept</span><span class="p">,</span> <span class="n">MatchAltitude</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="MatchAltitude"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.MatchAltitude">[docs]</a><span class="k">class</span> <span class="nc">MatchAltitude</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    State that matches altitude with a threat aircraft.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="MatchAltitude.execute"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.MatchAltitude.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="n">StateAgent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+        <span class="c1"># Check threat is detected</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Issue command to match threat altitude</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">entity_state</span>
+        <span class="n">threat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ut</span><span class="o">.</span><span class="n">is_close</span><span class="p">(</span><span class="n">threat</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">z_c</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SetAltitudeCmd</span><span class="p">(</span><span class="n">threat</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="PureIntercept"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.PureIntercept">[docs]</a><span class="k">class</span> <span class="nc">PureIntercept</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default state for a stern conversion manoeuvre.</span>
+
+<span class="sd">    This state intercepts a target by pointing the aircraft nose directly at it.</span>
+<span class="sd">    During execution the relative bearing to the threat is calculated and</span>
+<span class="sd">    commands are issued to turn the aircraft to fly toward it.</span>
+
+<span class="sd">    If an enemy is detected within the defined turn range the state requests a</span>
+<span class="sd">    transition to the FlyRelativeBearing state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">TURN_RANGE</span> <span class="o">=</span> <span class="mf">15.0</span>  <span class="c1"># range to threat aircraft (NM)</span>
+
+<div class="viewcode-block" id="PureIntercept.execute"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.PureIntercept.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="n">StateAgent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+        <span class="c1"># Check threat is detected</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Determine the bearing to the threat aircraft</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">entity_state</span>
+        <span class="n">threat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span>
+        <span class="n">threat_bearing</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">relative_bearing</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                <span class="n">threat</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">threat</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="c1"># Issue command to turn toward threat</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ut</span><span class="o">.</span><span class="n">is_close</span><span class="p">(</span><span class="n">threat_bearing</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">desired_heading</span><span class="p">):</span>
+            <span class="c1"># self.commands.append(SetHeadingCmd(threat_bearing))</span>
+            <span class="c1"># TODO: extract GLoad, calculate based on desired displacement</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SetHeadingGLoadCmd</span><span class="p">(</span><span class="n">psi_c</span><span class="o">=</span><span class="n">threat_bearing</span><span class="p">,</span>
+                                                    <span class="n">gload_c</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="PureIntercept.process_state"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.PureIntercept.process_state">[docs]</a>    <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span><span class="p">:</span>
+            <span class="c1"># Check whether at turn range from threat</span>
+            <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">entity_state</span>
+            <span class="n">threat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">pos_2d</span><span class="p">(),</span> <span class="n">threat</span><span class="o">.</span><span class="n">pos_2d</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">ut</span><span class="o">.</span><span class="n">metres_to_nautical_miles</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TURN_RANGE</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">FlyRelativeBearing</span></div></div>
+
+
+<div class="viewcode-block" id="FlyRelativeBearing"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.FlyRelativeBearing">[docs]</a><span class="k">class</span> <span class="nc">FlyRelativeBearing</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    State to fly at a constant bearing relative to the threat aircraft.</span>
+
+<span class="sd">    On entry to this state a command is issued to turn the aircraft a</span>
+<span class="sd">    predetermined angle relative to the threat aircraft. When the turn has been</span>
+<span class="sd">    completed the aircraft will continue to fly on this bearing to increase</span>
+<span class="sd">    lateral separation, until the desired displacement has been achieved.</span>
+
+<span class="sd">    If the desired displacement has been achieved the state requests a</span>
+<span class="sd">    transition to the FlyingOffset state. If no threats are detected the state</span>
+<span class="sd">    requests a transition back to the default state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">TURN_ANGLE</span> <span class="o">=</span> <span class="mf">15.0</span>  <span class="c1"># relative bearing angle (deg)</span>
+    <span class="n">DESIRED_DISPLACEMENT</span> <span class="o">=</span> <span class="mi">5000</span>  <span class="c1"># lateral separation (ft), depends on turn rate</span>
+
+<div class="viewcode-block" id="FlyRelativeBearing.on_entry"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.FlyRelativeBearing.on_entry">[docs]</a>    <span class="k">def</span> <span class="nf">on_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first_tick</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="FlyRelativeBearing.execute"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.FlyRelativeBearing.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="n">StateAgent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+        <span class="c1"># Execute state behaviour only on first tick after entering state</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first_tick</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_first_tick</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="c1"># Check threat is detected</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span><span class="p">:</span>
+                <span class="k">return</span>
+
+            <span class="c1"># Calculate bearing from entity to threat and the reverse</span>
+            <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">entity_state</span>
+            <span class="n">threat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span>
+            <span class="n">threat_bearing</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">relative_bearing</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                    <span class="n">threat</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">threat</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">entity_bearing</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">reciprocal_heading</span><span class="p">(</span><span class="n">threat_bearing</span><span class="p">)</span>
+
+            <span class="c1"># Add or subtract the turn angle depending on whether we are</span>
+            <span class="c1"># clockwise or counter-clockwise from the threat&#39;s heading, so that</span>
+            <span class="c1"># we turn away from the threat not across it</span>
+            <span class="k">if</span> <span class="n">ut</span><span class="o">.</span><span class="n">is_angle_ccw</span><span class="p">(</span><span class="n">threat</span><span class="o">.</span><span class="n">heading</span><span class="p">,</span> <span class="n">entity_bearing</span><span class="p">):</span>
+                <span class="n">new_heading</span> <span class="o">=</span> <span class="n">threat_bearing</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">TURN_ANGLE</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_heading</span> <span class="o">=</span> <span class="n">threat_bearing</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">TURN_ANGLE</span>
+            <span class="n">new_heading</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">constrain_360</span><span class="p">(</span><span class="n">new_heading</span><span class="p">)</span>
+
+            <span class="c1"># Issue the change heading command</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ut</span><span class="o">.</span><span class="n">is_close</span><span class="p">(</span><span class="n">new_heading</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">desired_heading</span><span class="p">,</span>
+                    <span class="n">abs_tol</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+                <span class="c1"># self.commands.append(SetHeadingCmd(new_heading))</span>
+                <span class="c1"># TODO: extract GLoad, calculate based on desired displacement</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SetHeadingGLoadCmd</span><span class="p">(</span><span class="n">psi_c</span><span class="o">=</span><span class="n">new_heading</span><span class="p">,</span> <span class="n">gload_c</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="FlyRelativeBearing.process_state"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.FlyRelativeBearing.process_state">[docs]</a>    <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span><span class="p">:</span>
+            <span class="c1"># Calculate the lateral distance to the threat aircraft</span>
+            <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">entity_state</span>
+            <span class="n">threat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">pos_2d</span><span class="p">(),</span> <span class="n">threat</span><span class="o">.</span><span class="n">pos_2d</span><span class="p">())</span>
+            <span class="n">displacement</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">lateral_displacement</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                    <span class="n">threat</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">threat</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">threat</span><span class="o">.</span><span class="n">heading</span><span class="p">,</span>
+                    <span class="n">ut</span><span class="o">.</span><span class="n">metres_to_nautical_miles</span><span class="p">(</span><span class="n">distance</span><span class="p">))</span>
+
+            <span class="c1"># Check whether the desired lateral separation has been reached</span>
+            <span class="k">if</span> <span class="n">displacement</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DESIRED_DISPLACEMENT</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">FlyingOffset</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># No threats detected so return to default state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">PureIntercept</span></div></div>
+
+
+<div class="viewcode-block" id="FlyingOffset"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.FlyingOffset">[docs]</a><span class="k">class</span> <span class="nc">FlyingOffset</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    State to fly parallel to a threat aircraft to maintain constant separation.</span>
+
+<span class="sd">    On entry to this state a command is issued to turn the aircraft to fly</span>
+<span class="sd">    parallel to the flight path of the threat aircraft. When the turn has been</span>
+<span class="sd">    completed the aircraft will continue to fly on this heading to maintain</span>
+<span class="sd">    lateral separation, until the conversion point has been reached. Note that</span>
+<span class="sd">    the state does not currently check whether the heading is still parallel to</span>
+<span class="sd">    the threat flight path; if the threat changes heading the lateral separation</span>
+<span class="sd">    will change.</span>
+
+<span class="sd">    If the defined conversion point has been reached the state requests a</span>
+<span class="sd">    transition to the Converting state. If no threats are detected the state</span>
+<span class="sd">    requests a transition back to the default state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">CONVERSION_RANGE</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># range to threat aircraft at conversion point (NM)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">StateAgent</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_range</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="FlyingOffset.execute"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.FlyingOffset.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="n">StateAgent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+        <span class="c1"># Check threat is detected</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Determine heading parallel to flight path of threat</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">entity_state</span>
+        <span class="n">threat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span>
+        <span class="n">parallel_heading</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">reciprocal_heading</span><span class="p">(</span><span class="n">threat</span><span class="o">.</span><span class="n">heading</span><span class="p">)</span>
+
+        <span class="c1"># Issue the change heading command</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ut</span><span class="o">.</span><span class="n">is_close</span><span class="p">(</span><span class="n">parallel_heading</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">desired_heading</span><span class="p">,</span>
+                <span class="n">abs_tol</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+            <span class="c1"># self.commands.append(SetHeadingCmd(parallel_heading))</span>
+            <span class="c1"># TODO: extract GLoad, calculate based on desired displacement</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SetHeadingGLoadCmd</span><span class="p">(</span><span class="n">psi_c</span><span class="o">=</span><span class="n">parallel_heading</span><span class="p">,</span> <span class="n">gload_c</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="FlyingOffset.process_state"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.FlyingOffset.process_state">[docs]</a>    <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span><span class="p">:</span>
+            <span class="c1"># Check whether the conversion point has been reached</span>
+            <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">entity_state</span>
+            <span class="n">threat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">pos_2d</span><span class="p">(),</span> <span class="n">threat</span><span class="o">.</span><span class="n">pos_2d</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">ut</span><span class="o">.</span><span class="n">metres_to_nautical_miles</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONVERSION_RANGE</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">Converting</span>
+
+            <span class="c1"># Check if still closing with threat</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_range</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">distance</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_range</span><span class="p">:</span>
+                    <span class="c1"># Not closing with threat so return to default state</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">PureIntercept</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_last_range</span> <span class="o">=</span> <span class="n">distance</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># No threats detected so return to default state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">PureIntercept</span></div></div>
+
+
+<div class="viewcode-block" id="Converting"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.Converting">[docs]</a><span class="k">class</span> <span class="nc">Converting</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    State to turn aircraft to match a threat aircraft&#39;s heading to maintain a</span>
+<span class="sd">    rear-hemisphere position.</span>
+
+<span class="sd">    During execution commands are issued to turn the aircraft to match the</span>
+<span class="sd">    threat aircraft heading. In the special case where the headings are exactly</span>
+<span class="sd">    reciprocal, commands are initially issued to turn toward the threat aircraft</span>
+<span class="sd">    itself to ensure that the turn is in the correct direction.</span>
+
+<span class="sd">    If no threats are detected the state requests a transition back to the</span>
+<span class="sd">    default state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">NO_CLOSER_RANGE</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># minimum range from threat to prevent overshoot (NM)</span>
+
+<div class="viewcode-block" id="Converting.execute"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.Converting.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="n">StateAgent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+        <span class="c1"># Check threat is detected</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">entity_state</span>
+        <span class="n">threat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span>
+
+        <span class="c1"># Check if the threat heading is exactly reciprocal</span>
+        <span class="k">if</span> <span class="n">ut</span><span class="o">.</span><span class="n">is_reciprocal</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">heading</span><span class="p">,</span> <span class="n">threat</span><span class="o">.</span><span class="n">heading</span><span class="p">):</span>
+            <span class="c1"># Issue command to turn toward the threat aircraft</span>
+            <span class="n">threat_bearing</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">relative_bearing</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                    <span class="n">threat</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">threat</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ut</span><span class="o">.</span><span class="n">is_close</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">desired_heading</span><span class="p">,</span> <span class="n">threat_bearing</span><span class="p">,</span>
+                    <span class="n">abs_tol</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+                <span class="c1"># self.commands.append(SetHeadingCmd(threat_bearing))</span>
+                <span class="c1"># TODO: extract GLoad, calculate based on desired displacement</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SetHeadingGLoadCmd</span><span class="p">(</span><span class="n">psi_c</span><span class="o">=</span><span class="n">threat_bearing</span><span class="p">,</span> <span class="n">gload_c</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">ut</span><span class="o">.</span><span class="n">is_close</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">desired_heading</span><span class="p">,</span> <span class="n">threat</span><span class="o">.</span><span class="n">heading</span><span class="p">):</span>
+            <span class="c1"># Issue command to turn to match the threat aircraft heading</span>
+            <span class="c1"># self.commands.append(SetHeadingCmd(threat.heading))</span>
+            <span class="c1"># TODO: extract GLoad, calculate based on desired displacement</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SetHeadingGLoadCmd</span><span class="p">(</span><span class="n">psi_c</span><span class="o">=</span><span class="n">threat</span><span class="o">.</span><span class="n">heading</span><span class="p">,</span> <span class="n">gload_c</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
+
+        <span class="c1"># Adjust the entity speed to avoid overshooting</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">desired_v</span> <span class="o">&gt;</span> <span class="n">threat</span><span class="o">.</span><span class="n">v</span> <span class="ow">and</span> <span class="ow">not</span>
+                <span class="n">ut</span><span class="o">.</span><span class="n">is_close</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">desired_v</span><span class="p">,</span> <span class="n">threat</span><span class="o">.</span><span class="n">v</span><span class="p">)):</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">pos_2d</span><span class="p">(),</span> <span class="n">threat</span><span class="o">.</span><span class="n">pos_2d</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">ut</span><span class="o">.</span><span class="n">metres_to_nautical_miles</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span> <span class="o">&lt;=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">NO_CLOSER_RANGE</span><span class="p">:</span>
+                <span class="c1"># Issue command to match threat speed</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SetSpeedCmd</span><span class="p">(</span><span class="n">threat</span><span class="o">.</span><span class="n">v</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Converting.process_state"><a class="viewcode-back" href="../../../../ace_zero.agents.fsm_agent.stern_conversion.html#ace_zero.agents.fsm_agent.stern_conversion.Converting.process_state">[docs]</a>    <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">beliefs</span><span class="o">.</span><span class="n">threat_state</span><span class="p">:</span>
+            <span class="c1"># No threats detected so return to the default state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">PureIntercept</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

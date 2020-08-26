@@ -1,0 +1,364 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.xcombat &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>ace_zero.xcombat</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ace_zero.xcombat</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Exports the result of an ace_zero simulation to xcombat output for 3D visualisation. </span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">utils</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;mikepsn&#39;</span>
+
+<div class="viewcode-block" id="AircraftState"><a class="viewcode-back" href="../../ace_zero.xcombat.html#ace_zero.xcombat.AircraftState">[docs]</a><span class="k">class</span> <span class="nc">AircraftState</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;State of a single aircraft at a given instance in simulation time.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mfly</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deadflag</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ac_ident</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mach</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">throt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actype</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msl</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_flares</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flares</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beam_elevation</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beam_azimuth</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizontal_scan</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertical_scan</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radar_range</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inst_beam_azimuth</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inst_beam_elevation</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beam_height</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beam_width</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clutter_patch_1_x</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clutter_patch_1_y</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clutter_patch_2_x</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clutter_patch_2_y</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clutter_area_1</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clutter_area_2</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clutter_lobe_1</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clutter_lobe_2</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clutter_patch_prf</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comque</span> <span class="o">=</span> <span class="s2">&quot;00000001000&quot;</span>
+
+<div class="viewcode-block" id="AircraftState.update_state"><a class="viewcode-back" href="../../ace_zero.xcombat.html#ace_zero.xcombat.AircraftState.update_state">[docs]</a>    <span class="k">def</span> <span class="nf">update_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">fuel</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">=</span> <span class="n">psi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">phi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mach</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">utils</span><span class="o">.</span><span class="n">mps_to_mach</span><span class="p">(</span><span class="n">v</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="Timeslice"><a class="viewcode-back" href="../../ace_zero.xcombat.html#ace_zero.xcombat.Timeslice">[docs]</a><span class="k">class</span> <span class="nc">Timeslice</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A timeslice consists of a list of aircraft states for the current simulation timestep. &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aircraft</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="XCombatRun"><a class="viewcode-back" href="../../ace_zero.xcombat.html#ace_zero.xcombat.XCombatRun">[docs]</a><span class="k">class</span> <span class="nc">XCombatRun</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A history of a single simulation run.</span>
+<span class="sd">        Consists of a header followed by a sequence of timeslices. &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;VersionD</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;ACE ZERO</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="s2">&quot;Generated by ACE0 for XCombat</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_line</span> <span class="o">=</span> <span class="s2">&quot;3 9 10 2 </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_aircraft</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_sides</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ac_side_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_aircraft</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_sides</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_waypoints</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_history_file</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeslices</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<div class="viewcode-block" id="XCombatRun.create_history_file"><a class="viewcode-back" href="../../ace_zero.xcombat.html#ace_zero.xcombat.XCombatRun.create_history_file">[docs]</a>    <span class="k">def</span> <span class="nf">create_history_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates a history run file. The name of the file is automatically generated,</span>
+<span class="sd">            and includes the date and time of generation.</span>
+<span class="sd">            By default the run history files are generated in a folder called runs.</span>
+<span class="sd">            If the folder doesn&#39;t exist it is created. &quot;&quot;&quot;</span>
+
+        <span class="n">localtime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">_%H%M%S&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">())</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">localtime</span> <span class="o">+</span> <span class="s1">&#39;_ace_zero_run.his&#39;</span>
+        <span class="n">runs_dir</span> <span class="o">=</span> <span class="s1">&#39;runs&#39;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">runs_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">runs_dir</span><span class="p">)</span>
+
+        <span class="n">full_path</span> <span class="o">=</span> <span class="n">runs_dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">filename</span>
+        <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XCombatRun.update_traces"><a class="viewcode-back" href="../../ace_zero.xcombat.html#ace_zero.xcombat.XCombatRun.update_traces">[docs]</a>    <span class="k">def</span> <span class="nf">update_traces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">traces</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Loads a list of aircraft traces into the XCombat run format. &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">timeslice</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">traces</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">aircraft</span> <span class="ow">in</span> <span class="n">timeslice</span><span class="p">:</span>
+                <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">fuel</span> <span class="o">=</span> <span class="n">aircraft</span>
+                <span class="n">ac</span> <span class="o">=</span> <span class="n">AircraftState</span><span class="p">()</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">fuel</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">timeslices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ac</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XCombatRun.update_history"><a class="viewcode-back" href="../../ace_zero.xcombat.html#ace_zero.xcombat.XCombatRun.update_history">[docs]</a>    <span class="k">def</span> <span class="nf">update_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_histories</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Converts the list of fighter state histories into the xcombat format. &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">timeslice</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">state_histories</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">fighter</span> <span class="ow">in</span> <span class="n">timeslice</span><span class="p">:</span>
+                <span class="n">ac</span> <span class="o">=</span> <span class="n">AircraftState</span><span class="p">()</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">ac_ident</span> <span class="o">=</span> <span class="n">fighter</span><span class="o">.</span><span class="n">id</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">side</span> <span class="o">=</span> <span class="n">fighter</span><span class="o">.</span><span class="n">side</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">actype</span> <span class="o">=</span> <span class="n">fighter</span><span class="o">.</span><span class="n">actype</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">timestep</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="p">(</span><span class="n">fighter</span><span class="o">.</span><span class="n">timestep</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">))</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">metres_to_feet</span><span class="p">(</span><span class="n">fighter</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">metres_to_feet</span><span class="p">(</span><span class="n">fighter</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">metres_to_feet</span><span class="p">(</span><span class="o">-</span><span class="n">fighter</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">psi</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">fighter</span><span class="o">.</span><span class="n">psi</span><span class="p">)</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">fighter</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">fighter</span><span class="o">.</span><span class="n">phi</span><span class="p">)</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">mach</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="n">utils</span><span class="o">.</span><span class="n">mps_to_mach</span><span class="p">(</span><span class="n">fighter</span><span class="o">.</span><span class="n">v</span><span class="p">))</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">fighter</span><span class="o">.</span><span class="n">gload</span><span class="p">)</span>
+
+                    <span class="c1"># Temporary Radar Parameters</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">beam_azimuth</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">beam_elevation</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">horizontal_scan</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">fighter</span><span class="o">.</span><span class="n">sensor_state</span><span class="o">.</span><span class="n">fov</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">vertical_scan</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">fighter</span><span class="o">.</span><span class="n">sensor_state</span><span class="o">.</span><span class="n">fov</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">radar_range</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">metres_to_feet</span><span class="p">(</span><span class="n">fighter</span><span class="o">.</span><span class="n">sensor_state</span><span class="o">.</span><span class="n">max_range</span><span class="p">))</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">inst_beam_azimuth</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">inst_beam_elevation</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">beam_height</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">fighter</span><span class="o">.</span><span class="n">sensor_state</span><span class="o">.</span><span class="n">fov</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+                <span class="n">ac</span><span class="o">.</span><span class="n">beam_width</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">fighter</span><span class="o">.</span><span class="n">sensor_state</span><span class="o">.</span><span class="n">fov</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">timeslices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ac</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XCombatRun.generate_run_history"><a class="viewcode-back" href="../../ace_zero.xcombat.html#ace_zero.xcombat.XCombatRun.generate_run_history">[docs]</a>    <span class="k">def</span> <span class="nf">generate_run_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates a history file for xcombat visualisation. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ac_side_str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_waypoints</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeslices</span><span class="p">:</span>
+            <span class="n">ac_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">timestep</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">mfly</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">deadflag</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">ac_ident</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">side</span><span class="p">,</span> \
+                       <span class="n">t</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">psi</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> \
+                       <span class="n">t</span><span class="o">.</span><span class="n">mach</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">throt</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">eta</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">actype</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">n_flares</span><span class="p">,</span> \
+                       <span class="n">t</span><span class="o">.</span><span class="n">beam_elevation</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">beam_azimuth</span><span class="p">,</span> \
+                       <span class="n">t</span><span class="o">.</span><span class="n">horizontal_scan</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">vertical_scan</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">radar_range</span><span class="p">,</span> \
+                       <span class="n">t</span><span class="o">.</span><span class="n">inst_beam_azimuth</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">inst_beam_elevation</span><span class="p">,</span> \
+                       <span class="n">t</span><span class="o">.</span><span class="n">beam_height</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">beam_width</span><span class="p">,</span> \
+                       <span class="n">t</span><span class="o">.</span><span class="n">clutter_patch_1_x</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">clutter_patch_1_y</span><span class="p">,</span> \
+                       <span class="n">t</span><span class="o">.</span><span class="n">clutter_patch_2_x</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">clutter_patch_2_y</span><span class="p">,</span> \
+                       <span class="n">t</span><span class="o">.</span><span class="n">clutter_area_1</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">clutter_area_2</span><span class="p">,</span> \
+                       <span class="n">t</span><span class="o">.</span><span class="n">clutter_lobe_1</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">clutter_lobe_2</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">clutter_patch_prf</span><span class="p">,</span> \
+                       <span class="n">t</span><span class="o">.</span><span class="n">comque</span><span class="p">)</span>
+
+            <span class="n">ac_str</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%6d</span><span class="s1"> </span><span class="si">%6d</span><span class="s1"> </span><span class="si">%6d</span><span class="s1"> &#39;</span>
+                      <span class="s1">&#39;</span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> &#39;</span>
+                      <span class="s1">&#39;</span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4ld</span><span class="s1"> </span><span class="si">%4ld</span><span class="s1"> </span><span class="si">%4ld</span><span class="s1"> </span><span class="si">%4ld</span><span class="s1"> </span><span class="si">%4ld</span><span class="s1"> </span><span class="si">%4ld</span><span class="s1"> </span><span class="si">%4ld</span><span class="s1"> </span><span class="si">%4ld</span><span class="s1"> &#39;</span>
+                      <span class="s1">&#39;</span><span class="si">%4ld</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%4d</span><span class="s1"> </span><span class="si">%12s</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">ac_line</span> <span class="o">=</span> <span class="n">ac_str</span> <span class="o">%</span> <span class="n">ac_tuple</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">ac_line</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

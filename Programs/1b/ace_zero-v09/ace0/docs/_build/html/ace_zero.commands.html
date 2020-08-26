@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.commands module &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ace_zero.commands module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>ace_zero.commands module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ace_zero.commands.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ace_zero.commands">
+<span id="ace-zero-commands-module"></span><h1>ace_zero.commands module<a class="headerlink" href="#module-ace_zero.commands" title="Permalink to this headline">¶</a></h1>
+<p>Commands Module</p>
+<p>This module contains a list of commands that the pilot agent can send to the flight control system.
+Each command represents an atomic agent action that the pilot can generate.
+Each command is defined as a named tuple, specified by the command name and a list of parameters.
+In the case where the command doesn&#8217;t have any parameters, we just use an empty list.</p>
+<p>Note that all the parameters for a command are denoted by an underscore _c.
+This is to represent the commanded value and not the actual value of a parameter. 
+We use this to differentiate the commanded value and the actual value when we 
+calculate the error in the flight control system.</p>
+<p>The list of commands currently supported include:</p>
+<ul class="simple">
+<li>SetFlyLevelCmd: sets the desired pitch (theta_c) and roll (phi_c) angles to 0.0</li>
+<li>SetPitchAngleCmd: sets the desired pitch (theta_c) angle. will cause the aircraft to ascend or descend</li>
+<li>SetAltitudeCmd: sets the desired altitude (z_c) with a desired pitch (theta_c) angle</li>
+<li>SetSpeedCmd: sets the desired aircraft speed (v_c)</li>
+<li>SetHeadingCmd: sets the desired aircraft heading (psi_c)</li>
+<li>SetWaypointCmd: sets the desired waypoint to fly to (x_c, y_c)</li>
+</ul>
+<dl class="class">
+<dt id="ace_zero.commands.SetAltitudeCmd">
+<em class="property">class </em><code class="descclassname">ace_zero.commands.</code><code class="descname">SetAltitudeCmd</code><span class="sig-paren">(</span><em>z_c</em>, <em>theta_c</em><span class="sig-paren">)</span><a class="headerlink" href="#ace_zero.commands.SetAltitudeCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+<dl class="attribute">
+<dt id="ace_zero.commands.SetAltitudeCmd.theta_c">
+<code class="descname">theta_c</code><a class="headerlink" href="#ace_zero.commands.SetAltitudeCmd.theta_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ace_zero.commands.SetAltitudeCmd.z_c">
+<code class="descname">z_c</code><a class="headerlink" href="#ace_zero.commands.SetAltitudeCmd.z_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.commands.SetFlyLevelCmd">
+<em class="property">class </em><code class="descclassname">ace_zero.commands.</code><code class="descname">SetFlyLevelCmd</code><a class="headerlink" href="#ace_zero.commands.SetFlyLevelCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.commands.SetHeadingCmd">
+<em class="property">class </em><code class="descclassname">ace_zero.commands.</code><code class="descname">SetHeadingCmd</code><span class="sig-paren">(</span><em>psi_c</em><span class="sig-paren">)</span><a class="headerlink" href="#ace_zero.commands.SetHeadingCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+<dl class="attribute">
+<dt id="ace_zero.commands.SetHeadingCmd.psi_c">
+<code class="descname">psi_c</code><a class="headerlink" href="#ace_zero.commands.SetHeadingCmd.psi_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.commands.SetHeadingGLoadCmd">
+<em class="property">class </em><code class="descclassname">ace_zero.commands.</code><code class="descname">SetHeadingGLoadCmd</code><span class="sig-paren">(</span><em>psi_c</em>, <em>gload_c</em><span class="sig-paren">)</span><a class="headerlink" href="#ace_zero.commands.SetHeadingGLoadCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+<dl class="attribute">
+<dt id="ace_zero.commands.SetHeadingGLoadCmd.gload_c">
+<code class="descname">gload_c</code><a class="headerlink" href="#ace_zero.commands.SetHeadingGLoadCmd.gload_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ace_zero.commands.SetHeadingGLoadCmd.psi_c">
+<code class="descname">psi_c</code><a class="headerlink" href="#ace_zero.commands.SetHeadingGLoadCmd.psi_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.commands.SetPitchAngleCmd">
+<em class="property">class </em><code class="descclassname">ace_zero.commands.</code><code class="descname">SetPitchAngleCmd</code><span class="sig-paren">(</span><em>theta_c</em><span class="sig-paren">)</span><a class="headerlink" href="#ace_zero.commands.SetPitchAngleCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+<dl class="attribute">
+<dt id="ace_zero.commands.SetPitchAngleCmd.theta_c">
+<code class="descname">theta_c</code><a class="headerlink" href="#ace_zero.commands.SetPitchAngleCmd.theta_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.commands.SetSpeedCmd">
+<em class="property">class </em><code class="descclassname">ace_zero.commands.</code><code class="descname">SetSpeedCmd</code><span class="sig-paren">(</span><em>v_c</em><span class="sig-paren">)</span><a class="headerlink" href="#ace_zero.commands.SetSpeedCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+<dl class="attribute">
+<dt id="ace_zero.commands.SetSpeedCmd.v_c">
+<code class="descname">v_c</code><a class="headerlink" href="#ace_zero.commands.SetSpeedCmd.v_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.commands.SetWaypointCmd">
+<em class="property">class </em><code class="descclassname">ace_zero.commands.</code><code class="descname">SetWaypointCmd</code><span class="sig-paren">(</span><em>x_c</em>, <em>y_c</em><span class="sig-paren">)</span><a class="headerlink" href="#ace_zero.commands.SetWaypointCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+<dl class="attribute">
+<dt id="ace_zero.commands.SetWaypointCmd.x_c">
+<code class="descname">x_c</code><a class="headerlink" href="#ace_zero.commands.SetWaypointCmd.x_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ace_zero.commands.SetWaypointCmd.y_c">
+<code class="descname">y_c</code><a class="headerlink" href="#ace_zero.commands.SetWaypointCmd.y_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

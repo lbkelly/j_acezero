@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.platform_dynamics module &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ace_zero.platform_dynamics module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>ace_zero.platform_dynamics module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ace_zero.platform_dynamics.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ace_zero.platform_dynamics">
+<span id="ace-zero-platform-dynamics-module"></span><h1>ace_zero.platform_dynamics module<a class="headerlink" href="#module-ace_zero.platform_dynamics" title="Permalink to this headline">¶</a></h1>
+<p>Platform Dynamics Model</p>
+<p>This is a simple flight dynamics that is by no means realistic.
+It can be described as an arcade level flight dynamics model.
+It isn&#8217;t quite complete and still needs tuning.</p>
+<p>Internally the model uses SI units (metres, m/s etc.)</p>
+<p>The platform dynamics model is represented by a number of state 
+variables:</p>
+<ul class="simple">
+<li>Position (x, y, z)</li>
+<li>Orientation (psi, theta, phi) or (yaw, pitch, roll)</li>
+<li>Speed (v)</li>
+<li>Weight (m) and Fuel (fuel)</li>
+</ul>
+<p>Note that the weight of the aircraft and the fuel are not taken into
+account in the dynamics calculations. This will be added at future date.</p>
+<p>Also, we haven&#8217;t modelled angle of attack (alpha) or slide-slip angle (beta).
+The aircraft&#8217;s velocity vector will be the direction it&#8217;s nose is pointed at.</p>
+<p>TODO:
+- Move the control law variables out of the code and into the data files.
+- Add roll angle and the ability to turn at different g-forces</p>
+<dl class="class">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics">
+<em class="property">class </em><code class="descclassname">ace_zero.platform_dynamics.</code><code class="descname">PlatformDynamics</code><span class="sig-paren">(</span><em>x=0.0</em>, <em>y=0.0</em>, <em>z=0.0</em>, <em>psi=0.0</em>, <em>theta=0.0</em>, <em>phi=0.0</em>, <em>v=0.0</em>, <em>weight=0.0</em>, <em>fuel=0.0</em>, <em>v_min=100</em>, <em>v_max=1000</em>, <em>v_K=0.1</em>, <em>theta_K=0.005</em>, <em>psi_K=10.0</em>, <em>gload_max=9.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The platform model is defined by the following state variables:
+Position: x, y, z (metres)
+Orientation: psi, theta, phi (yaw, pitch, roll) in (degrees)
+Mass/Fuel: (kg) - for the future.</p>
+<p>Additionally, the model keeps of track of a number of commanded/desired
+values. Theses are:
+z_c - desired/commanded altitude
+psi_c - desired/commanded yaw angle psi
+theta_c - desired/commanded pitch angle theta
+v_c - desired/command speed v</p>
+<p>The model also keeps track of it&#8217;s trajectory through 3D space for plotting
+purposes. This is stored as a list of tuples in the self.trace atttribute.
+Each tuple in the list represents the state of the aircraft at a single
+time step.</p>
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.altitude_cmd">
+<code class="descname">altitude_cmd</code><span class="sig-paren">(</span><em>zc</em>, <em>theta_c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.altitude_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.altitude_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED
+Issues an altitude command by setting a desired altitude
+z_c and a desired pitch angle theta_c. Note that this type of
+alitude control has been moved into the flight control model
+and hence this method is deprecated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.altitude_control">
+<code class="descname">altitude_control</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.altitude_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.altitude_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>NOTE: DEPRECATED
+Control law for altitude. Note that this
+has been moved to the flight control system 
+and is now deprecated here.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.get_altitude">
+<code class="descname">get_altitude</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.get_altitude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.get_altitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the aircraft&#8217;s current altitude</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.get_orientation">
+<code class="descname">get_orientation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.get_orientation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.get_orientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the aircraft&#8217;s yaw, pitch and roll angles as a tuple.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.get_position">
+<code class="descname">get_position</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.get_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.get_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the aircraft position.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.get_speed">
+<code class="descname">get_speed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.get_speed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.get_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the aircraft&#8217;s current speed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.pitch_cmd">
+<code class="descname">pitch_cmd</code><span class="sig-paren">(</span><em>theta_c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.pitch_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.pitch_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the desired/commanded pitch angle theta_c</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.pitch_control">
+<code class="descname">pitch_control</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.pitch_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.pitch_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear control law for pitch control. 
+TODO: 
+- The control variable K_theta really needs to be tuned
+- Should we set up/lower limits for the pitch angle?
+- Move the control variables to a data file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.record_trace">
+<code class="descname">record_trace</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.record_trace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.record_trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends the current state of the aircraft to the trace list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.roll_cmd">
+<code class="descname">roll_cmd</code><span class="sig-paren">(</span><em>phi_c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.roll_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.roll_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the desired roll angle phi_c</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.roll_control">
+<code class="descname">roll_control</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.roll_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.roll_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Roll Control</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.set_altitude">
+<code class="descname">set_altitude</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.set_altitude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.set_altitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the aircraft altitude to z.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.set_gload">
+<code class="descname">set_gload</code><span class="sig-paren">(</span><em>gload</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.set_gload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.set_gload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the aircraft g load factor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.set_position">
+<code class="descname">set_position</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.set_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.set_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the aircraft position to (x, y).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.speed_cmd">
+<code class="descname">speed_cmd</code><span class="sig-paren">(</span><em>vc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.speed_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.speed_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the desired/commanded speed v_c.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.speed_control">
+<code class="descname">speed_control</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.speed_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.speed_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear control law to adjust aircraft speed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ticks the platform model for the current time step.
+- Records the aircraft trace
+- Controls the aircraft yaw, speed and pitch
+- Updates the aircraft dynamics equations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.update_platform">
+<code class="descname">update_platform</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.update_platform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.update_platform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solves the equations of motion for the current timestep and determines
+the new position (xn, yn, zn) of the aircraft.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.yaw_cmd">
+<code class="descname">yaw_cmd</code><span class="sig-paren">(</span><em>psi_c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.yaw_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.yaw_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the desired/commanded yaw angle psi_c</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.platform_dynamics.PlatformDynamics.yaw_control">
+<code class="descname">yaw_control</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/platform_dynamics.html#PlatformDynamics.yaw_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.platform_dynamics.PlatformDynamics.yaw_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear control law for yaw control. 
+TODO: Still need to tune control parameters/variables.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

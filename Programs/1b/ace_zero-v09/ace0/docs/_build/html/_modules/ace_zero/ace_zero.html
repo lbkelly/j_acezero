@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.ace_zero &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>ace_zero.ace_zero</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ace_zero.ace_zero</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Calls the ACE ZERO main function.</span>
+<span class="sd">Runs the simulation and then calls XCombat to display the trajectories of the</span>
+<span class="sd">two fighters.</span>
+
+<span class="sd">Note that ace_zero has been developed using Python 2.7</span>
+<span class="sd">and scientific python stack. There are dependencies on NumPy and matplotlib.</span>
+
+<span class="sd">We have been using Continuum Analytics&#39; Anaconda Python Distribution.</span>
+
+<span class="sd">The code hasn&#39;t been fully tested (still in alpha).</span>
+
+<span class="sd">The code has been developed on Apple MacOS X 10.11.12 El Capitan</span>
+<span class="sd">and Microsoft Windows 10. Still need to test it under Linux.</span>
+
+<span class="sd">TODO:</span>
+<span class="sd">- Port to Python 3.5 (this shoulnd&#39;t be too much effort)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;mikepsn, lrbenke&#39;</span>
+
+<span class="kn">import</span> <span class="nn">simulation</span>
+<span class="kn">import</span> <span class="nn">charts</span>
+<span class="kn">import</span> <span class="nn">xcombat</span> <span class="k">as</span> <span class="nn">xc</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<div class="viewcode-block" id="parse_arguments"><a class="viewcode-back" href="../../ace_zero.ace_zero.html#ace_zero.ace_zero.parse_arguments">[docs]</a><span class="k">def</span> <span class="nf">parse_arguments</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;ACE ZERO Simulator&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--scenario&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Specifies what scenario is to be simulated&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--graph&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Show graph of aircraft trajectories&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--noxcombat&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Hide xcombat visualisation of run results&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--critics&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Display performance critic graphs&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--xcombat_path&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Optional path to XCombat executable.&#39;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">args</span></div>
+
+
+<div class="viewcode-block" id="load_scenario"><a class="viewcode-back" href="../../ace_zero.ace_zero.html#ace_zero.ace_zero.load_scenario">[docs]</a><span class="k">def</span> <span class="nf">load_scenario</span><span class="p">(</span><span class="n">scenario_uri</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Loads and returns a scenario from the specified json file. &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+    <span class="kn">import</span> <span class="nn">json</span>
+
+    <span class="k">if</span> <span class="n">scenario_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Check it is a valid path</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">scenario_uri</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="s2">&quot;Scenario file &#39;</span><span class="si">{}</span><span class="s2">&#39; does not exist&quot;</span><span class="o">.</span>
+                             <span class="nb">format</span><span class="p">(</span><span class="n">scenario_uri</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">scenario_uri</span><span class="p">)</span> <span class="k">as</span> <span class="n">instream</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">instream</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="s2">&quot;Error opening scenario file &#39;</span><span class="si">{}</span><span class="s2">&#39;</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span>
+                             <span class="nb">format</span><span class="p">(</span><span class="n">scenario_uri</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="run_ace_zero"><a class="viewcode-back" href="../../ace_zero.ace_zero.html#ace_zero.ace_zero.run_ace_zero">[docs]</a><span class="k">def</span> <span class="nf">run_ace_zero</span><span class="p">(</span><span class="n">scenario</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">critics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">noxcombat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">xcombat_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Executes a simulation of the scenario provided and returns the aircraft</span>
+<span class="sd">    trajectories. &quot;&quot;&quot;</span>
+    <span class="c1"># Load scenario from path if provided</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scenario</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+        <span class="n">scenario</span> <span class="o">=</span> <span class="n">load_scenario</span><span class="p">(</span><span class="n">scenario</span><span class="p">)</span>
+
+    <span class="c1"># Run the simulation</span>
+    <span class="n">ace_zero</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">MultiAgentSimulation</span><span class="p">(</span><span class="n">scenario</span><span class="p">)</span>
+    <span class="n">ace_zero</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+    <span class="c1"># Generate the run output files in XCombat format</span>
+    <span class="n">run</span> <span class="o">=</span> <span class="n">xc</span><span class="o">.</span><span class="n">XCombatRun</span><span class="p">()</span>
+    <span class="n">run</span><span class="o">.</span><span class="n">update_history</span><span class="p">([</span><span class="n">ace_zero</span><span class="o">.</span><span class="n">viper</span><span class="o">.</span><span class="n">history</span><span class="p">,</span> <span class="n">ace_zero</span><span class="o">.</span><span class="n">cobra</span><span class="o">.</span><span class="n">history</span><span class="p">])</span>
+    <span class="n">run</span><span class="o">.</span><span class="n">generate_run_history</span><span class="p">()</span>
+
+    <span class="n">viper_trace</span> <span class="o">=</span> <span class="n">ace_zero</span><span class="o">.</span><span class="n">viper</span><span class="o">.</span><span class="n">fcs</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">trace</span>
+    <span class="n">cobra_trace</span> <span class="o">=</span> <span class="n">ace_zero</span><span class="o">.</span><span class="n">cobra</span><span class="o">.</span><span class="n">fcs</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">trace</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">noxcombat</span><span class="p">:</span>
+        <span class="c1"># Display aircraft trajectories using XCombat</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">xcombat_path</span><span class="p">:</span>
+            <span class="n">xcombat_path</span> <span class="o">=</span> <span class="n">find_xcombat</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">xcombat_path</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">run_output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="c1">#subprocess.call([xcombat_path, run_output_path],</span>
+                <span class="c1">#                cwd=os.path.dirname(xcombat_path))</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">xcombat_path</span><span class="p">,</span> <span class="n">run_output_path</span><span class="p">]</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">xcombat_path</span><span class="p">))</span>
+                
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span> <span class="s2">&quot;Could not run XCombat, check that the path to the &quot;</span> <span class="o">+</span> \
+                      <span class="s2">&quot;executable is correct: &#39;&quot;</span> <span class="o">+</span> <span class="n">xcombat_path</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s2">&quot;Could not find XCombat executable. Specify path or &quot;</span> <span class="o">+</span> \
+                  <span class="s2">&quot;install in a subdirectory of ACE Zero.&quot;</span>
+
+    <span class="k">if</span> <span class="n">graph</span><span class="p">:</span>
+        <span class="c1"># Display aircraft trajectories using matplotlib3d</span>
+        <span class="n">charts</span><span class="o">.</span><span class="n">draw_trajectories</span><span class="p">(</span><span class="n">viper_trace</span><span class="p">,</span> <span class="n">cobra_trace</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">critics</span><span class="p">:</span>
+        <span class="c1"># Display the performance critic graphs</span>
+        <span class="k">for</span> <span class="n">critic</span> <span class="ow">in</span> <span class="n">ace_zero</span><span class="o">.</span><span class="n">umpire</span><span class="o">.</span><span class="n">performance_critics</span><span class="p">:</span>
+            <span class="n">critic</span><span class="o">.</span><span class="n">draw_chart</span><span class="p">()</span>
+
+    <span class="c1"># Return the aircraft trajectories</span>
+    <span class="k">return</span> <span class="n">viper_trace</span><span class="p">,</span> <span class="n">cobra_trace</span></div>
+
+
+<div class="viewcode-block" id="find_xcombat"><a class="viewcode-back" href="../../ace_zero.ace_zero.html#ace_zero.ace_zero.find_xcombat">[docs]</a><span class="k">def</span> <span class="nf">find_xcombat</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Searches for the XCombat executable under the ACE Zero directory and</span>
+<span class="sd">    returns the absolute path if found. &quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;xcombat&quot;</span> <span class="ow">in</span> <span class="n">filename</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">and</span>
+                    <span class="n">filename</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.exe&quot;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parse_arguments</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">run_ace_zero</span><span class="p">(</span><span class="o">**</span><span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

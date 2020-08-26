@@ -1,0 +1,225 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.ace_zero module &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ace_zero.ace_zero module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>ace_zero.ace_zero module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ace_zero.ace_zero.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ace_zero.ace_zero">
+<span id="ace-zero-ace-zero-module"></span><h1>ace_zero.ace_zero module<a class="headerlink" href="#module-ace_zero.ace_zero" title="Permalink to this headline">¶</a></h1>
+<p>Calls the ACE ZERO main function.
+Runs the simulation and then calls XCombat to display the trajectories of the
+two fighters.</p>
+<p>Note that ace_zero has been developed using Python 2.7
+and scientific python stack. There are dependencies on NumPy and matplotlib.</p>
+<p>We have been using Continuum Analytics&#8217; Anaconda Python Distribution.</p>
+<p>The code hasn&#8217;t been fully tested (still in alpha).</p>
+<p>The code has been developed on Apple MacOS X 10.11.12 El Capitan
+and Microsoft Windows 10. Still need to test it under Linux.</p>
+<p>TODO:
+- Port to Python 3.5 (this shoulnd&#8217;t be too much effort)</p>
+<dl class="function">
+<dt id="ace_zero.ace_zero.find_xcombat">
+<code class="descclassname">ace_zero.ace_zero.</code><code class="descname">find_xcombat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/ace_zero.html#find_xcombat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.ace_zero.find_xcombat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches for the XCombat executable under the ACE Zero directory and
+returns the absolute path if found.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ace_zero.ace_zero.load_scenario">
+<code class="descclassname">ace_zero.ace_zero.</code><code class="descname">load_scenario</code><span class="sig-paren">(</span><em>scenario_uri</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/ace_zero.html#load_scenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.ace_zero.load_scenario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and returns a scenario from the specified json file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ace_zero.ace_zero.parse_arguments">
+<code class="descclassname">ace_zero.ace_zero.</code><code class="descname">parse_arguments</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/ace_zero.html#parse_arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.ace_zero.parse_arguments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ace_zero.ace_zero.run_ace_zero">
+<code class="descclassname">ace_zero.ace_zero.</code><code class="descname">run_ace_zero</code><span class="sig-paren">(</span><em>scenario=None</em>, <em>graph=False</em>, <em>critics=False</em>, <em>noxcombat=False</em>, <em>xcombat_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/ace_zero.html#run_ace_zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.ace_zero.run_ace_zero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes a simulation of the scenario provided and returns the aircraft
+trajectories.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

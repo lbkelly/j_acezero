@@ -1,0 +1,117 @@
+{
+    "plant_data_source_blue": "data/blue.json",
+    "plant_data_source_red": "data/red.json",
+    "maneuvers":
+        [
+
+            {
+                "name" : "pull_lever(blue)",
+                "theta_c" : -1.0,
+                "psi_c" : 0.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetPitchAngleCmd"],
+                "control" : "pitch",
+                "transitions" : [ [ "level", "upwards"] ]
+            },
+            {
+                "name" : "neutral_lever(blue)",
+                "theta_c" : 0.0,
+                "psi_c" : 0.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetFlyLevelCmd"],
+                "control" : "pitch",
+                "transitions" : [
+                    [ "upwards", "level"],
+                    [ "downwards", "level"]
+                ]
+            },
+            {
+                "name" : "push_lever(blue)",
+                "theta_c" : 1.0,
+                "psi_c" : 0.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetPitchAngleCmd"],
+                "control" : "pitch",
+                "transitions" : [
+                    [ "level", "downwards"]
+                ]
+            },
+            {
+                "name" : "steer_left(blue)",
+                "theta_c" : 0.0,
+                "psi_c" : -1.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetHeadingCmd"],
+                "control" : "yaw",
+                "transitions" : [
+                    ["straight", "towards_left"]
+                ]
+            },
+            {
+                "name" : "steer_right(blue)",
+                "theta_c" : 0.0,
+                "psi_c" : 1.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetHeadingCmd"],
+                "control" : "yaw",
+                "transitions" : [
+                    ["straight", "towards_right"]
+                ]
+            },
+            {
+                "name" : "center(blue)",
+                "theta_c" : 0.0,
+                "psi_c" : 0.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetFlyLevelCmd"],
+                "control" : "yaw",
+                "transitions" : [
+                    ["towards_right", "straight"],
+                    ["towards_left", "straight"]
+                ]
+            },
+            {
+                "name" : "accelerate(blue)",
+                "theta_c" : 0.0,
+                "psi_c" : 0.0,
+                "v_c" : 10.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetSpeedCmd"],
+                "control" : "speed",
+                "transitions" : [
+                    ["cruising", "accelerating"]
+                ]
+            },
+            {
+                "name" : "decelerate(blue)",
+                "theta_c" : 0.0,
+                "psi_c" : 0.0,
+                "v_c" : -10.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetSpeedCmd"],
+                "control" : "speed",
+                "transitions" : [
+                    ["cruising", "decelerating"]
+                ]
+            },
+            {
+                "name" : "cruise(blue)",
+                "theta_c" : 0.0,
+                "psi_c" : 0.0,
+                "v_c" : 0.0,
+                "z_c" : 0.0,
+                "commands" : [ "SetFlyLevelCmd"],
+                "control" : "speed",
+                "transitions" : [
+                    ["accelerating", "cruising"],
+                    ["decelerating", "cruising"]
+                ]
+            }
+        ]
+}

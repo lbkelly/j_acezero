@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.agents.diff_game_agent.park_stern_conversion module &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ace_zero.agents.diff_game_agent.park_stern_conversion module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>ace_zero.agents.diff_game_agent.park_stern_conversion module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ace_zero.agents.diff_game_agent.park_stern_conversion.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ace_zero.agents.diff_game_agent.park_stern_conversion">
+<span id="ace-zero-agents-diff-game-agent-park-stern-conversion-module"></span><h1>ace_zero.agents.diff_game_agent.park_stern_conversion module<a class="headerlink" href="#module-ace_zero.agents.diff_game_agent.park_stern_conversion" title="Permalink to this headline">¶</a></h1>
+<p>Implementation of the techniques discussed in the paper:</p>
+<blockquote>
+<div>Differential Game Based Air Combat Maneuver Generation Using Scoring Function Matrix
+H. Park, B.-Y. Lee, M.-J. Tahk, D.-W. Yoo
+International Journal of Aeronautical and Space Sciences, number 17, vol 2, pages 204-213
+2016</div></blockquote>
+<dl class="class">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.Maneuver">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.diff_game_agent.park_stern_conversion.</code><code class="descname">Maneuver</code><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#Maneuver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.Maneuver" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="staticmethod">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.Maneuver.load">
+<em class="property">static </em><code class="descname">load</code><span class="sig-paren">(</span><em>datasource</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#Maneuver.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.Maneuver.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.Maneuver.make_commands">
+<code class="descname">make_commands</code><span class="sig-paren">(</span><em>plant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#Maneuver.make_commands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.Maneuver.make_commands" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.Maneuver.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>plant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#Maneuver.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.Maneuver.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.diff_game_agent.park_stern_conversion.</code><code class="descname">SternConversionAgent</code><span class="sig-paren">(</span><em>maneuver_specs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#SternConversionAgent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">agents.diff_game_agent.two_player_agent.TwoPlayerAgent</span></code></p>
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.classify_tactical_situation">
+<code class="descname">classify_tactical_situation</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#SternConversionAgent.classify_tactical_situation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.classify_tactical_situation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.compute_aspect_angle">
+<code class="descname">compute_aspect_angle</code><span class="sig-paren">(</span><em>blue_plant</em>, <em>red_plant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#SternConversionAgent.compute_aspect_angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.compute_aspect_angle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.compute_bearing_angle">
+<code class="descname">compute_bearing_angle</code><span class="sig-paren">(</span><em>blue_plant</em>, <em>red_plant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#SternConversionAgent.compute_bearing_angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.compute_bearing_angle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.compute_orientation_score">
+<code class="descname">compute_orientation_score</code><span class="sig-paren">(</span><em>blue_plant</em>, <em>red_plant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#SternConversionAgent.compute_orientation_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.compute_orientation_score" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.compute_range_error_score">
+<code class="descname">compute_range_error_score</code><span class="sig-paren">(</span><em>blue_plant</em>, <em>red_plant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#SternConversionAgent.compute_range_error_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.compute_range_error_score" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.compute_velocity_error_score">
+<code class="descname">compute_velocity_error_score</code><span class="sig-paren">(</span><em>blue_plant</em>, <em>red_plant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#SternConversionAgent.compute_velocity_error_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.compute_velocity_error_score" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.evaluate_scoring_function">
+<code class="descname">evaluate_scoring_function</code><span class="sig-paren">(</span><em>state</em>, <em>tactical_situation</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#SternConversionAgent.evaluate_scoring_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.evaluate_scoring_function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.populate_scoring_matrix">
+<code class="descname">populate_scoring_matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#SternConversionAgent.populate_scoring_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.populate_scoring_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.setup_maneuvers">
+<code class="descname">setup_maneuvers</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#SternConversionAgent.setup_maneuvers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.setup_maneuvers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/park_stern_conversion.html#SternConversionAgent.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.park_stern_conversion.SternConversionAgent.tick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

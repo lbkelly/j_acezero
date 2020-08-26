@@ -1,0 +1,364 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.simulation &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>ace_zero.simulation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ace_zero.simulation</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/env/ python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Multi-agent simulation of two fighter aircraft in a 1v1 configuration.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;mikepsn, lrbenke&#39;</span>
+
+<span class="kn">import</span> <span class="nn">importlib</span>
+
+<span class="kn">import</span> <span class="nn">fighter</span>
+<span class="kn">from</span> <span class="nn">agents.agent</span> <span class="k">import</span> <span class="n">Agent</span>
+<span class="kn">from</span> <span class="nn">umpires.base</span> <span class="k">import</span> <span class="n">Umpire</span>
+
+
+<div class="viewcode-block" id="MultiAgentSimulation"><a class="viewcode-back" href="../../ace_zero.simulation.html#ace_zero.simulation.MultiAgentSimulation">[docs]</a><span class="k">class</span> <span class="nc">MultiAgentSimulation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A simple time stepped multi-agent simulation consisting of two fighter</span>
+<span class="sd">    aircraft in a 1v1 adversarial Within Visual Range (WVR) air combat scenario.</span>
+
+<span class="sd">    The simulation is defined by a json file that specifies the initial</span>
+<span class="sd">    conditions and agents for the fighters in the scenario.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scenario</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialises the start and end time for the simulation as well</span>
+<span class="sd">        as the tick rate. Instantiates two fighter aircraft, viper (blue) and</span>
+<span class="sd">        cobra (red).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">umpire</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scenario</span><span class="p">:</span>
+            <span class="n">scenario</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_scenario</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">scenario</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MultiAgentSimulation.setup"><a class="viewcode-back" href="../../ace_zero.simulation.html#ace_zero.simulation.MultiAgentSimulation.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scenario</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the simulation, entity and agent parameters from the specified</span>
+<span class="sd">        scenario dictionary, and initialises two fighter entities for execution.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            scenario (dict): dictionary specifying a scenario</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Load the simulation parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">[</span><span class="s1">&#39;tmin&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">[</span><span class="s1">&#39;dt&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Create the blue fighter &#39;viper&#39;</span>
+        <span class="n">initial</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">][</span><span class="s1">&#39;initial&#39;</span><span class="p">]</span>
+        <span class="n">agent_class</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">][</span><span class="s1">&#39;agent_class&#39;</span><span class="p">]</span>
+        <span class="n">agent_params</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">][</span><span class="s1">&#39;agent_parameters&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fighter</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">agent_class</span><span class="p">,</span> <span class="n">agent_params</span><span class="p">)</span>
+
+        <span class="c1"># Create the red fighter &#39;cobra&#39;</span>
+        <span class="n">initial</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">][</span><span class="s1">&#39;initial&#39;</span><span class="p">]</span>
+        <span class="n">agent_class</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">][</span><span class="s1">&#39;agent_class&#39;</span><span class="p">]</span>
+        <span class="n">agent_params</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">][</span><span class="s1">&#39;agent_parameters&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cobra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fighter</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">agent_class</span><span class="p">,</span> <span class="n">agent_params</span><span class="p">)</span>
+
+        <span class="c1"># Setup the Umpire</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">umpire</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_umpire</span><span class="p">(</span> <span class="n">scenario</span><span class="p">[</span><span class="s1">&#39;umpire&#39;</span><span class="p">],</span> <span class="bp">self</span> <span class="p">)</span></div>
+
+<div class="viewcode-block" id="MultiAgentSimulation.run"><a class="viewcode-back" href="../../ace_zero.simulation.html#ace_zero.simulation.MultiAgentSimulation.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs the simulation until the maximum run time self.tmax is reached.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">umpire</span><span class="o">.</span><span class="n">check_termination_triggers</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">umpire</span><span class="o">.</span><span class="n">evaluate_agent_performance</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MultiAgentSimulation.tick"><a class="viewcode-back" href="../../ace_zero.simulation.html#ace_zero.simulation.MultiAgentSimulation.tick">[docs]</a>    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ticks each fighter aircraft.</span>
+<span class="sd">        Gets the current state of each fighter and then passes each state to the</span>
+<span class="sd">        opponent aircraft. Once this is done, each aircraft is then ticked.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">viper_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">viper</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+        <span class="n">cobra_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cobra</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">viper</span><span class="o">.</span><span class="n">update_adversary_state</span><span class="p">(</span><span class="n">cobra_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cobra</span><span class="o">.</span><span class="n">update_adversary_state</span><span class="p">(</span><span class="n">viper_state</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">viper</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cobra</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="MultiAgentSimulation.get_fighter"><a class="viewcode-back" href="../../ace_zero.simulation.html#ace_zero.simulation.MultiAgentSimulation.get_fighter">[docs]</a>    <span class="k">def</span> <span class="nf">get_fighter</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">agent_class</span><span class="p">,</span> <span class="n">agent_params</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a Fighter with the specified initial conditions and agent.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            initial (string): path to the json file specifying the initial</span>
+<span class="sd">              conditions for the fighter</span>
+<span class="sd">            agent_class (string): qualified name of the class of the agent</span>
+<span class="sd">            agent_params (string): path to the json file specifying any</span>
+<span class="sd">              parameters required by the agent</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (Fighter): an initialised fighter entity</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AgentClass</span> <span class="o">=</span> <span class="n">get_class</span><span class="p">(</span><span class="n">agent_class</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">AgentClass</span><span class="p">,</span> <span class="n">Agent</span><span class="p">):</span>
+            <span class="c1"># TODO: replace with logger warning</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Agent class specified in scenario is not a &quot;</span> <span class="o">+</span>
+                    <span class="s2">&quot;subclass of Agent &#39;&quot;</span> <span class="o">+</span> <span class="n">agent_class</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+        <span class="n">pilot</span> <span class="o">=</span> <span class="n">AgentClass</span><span class="p">(</span><span class="n">params_filename</span><span class="o">=</span><span class="n">agent_params</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">pilot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">fighter</span><span class="o">.</span><span class="n">Fighter</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">pilot</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="MultiAgentSimulation.get_umpire"><a class="viewcode-back" href="../../ace_zero.simulation.html#ace_zero.simulation.MultiAgentSimulation.get_umpire">[docs]</a>    <span class="k">def</span> <span class="nf">get_umpire</span><span class="p">(</span> <span class="n">umpire_specs</span><span class="p">,</span> <span class="n">sim</span> <span class="p">)</span> <span class="p">:</span>
+        <span class="n">umpire</span> <span class="o">=</span> <span class="n">Umpire</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">trigger_specs</span> <span class="ow">in</span> <span class="n">umpire_specs</span><span class="p">[</span><span class="s1">&#39;triggers&#39;</span><span class="p">]</span> <span class="p">:</span>
+            <span class="n">TriggerClass</span> <span class="o">=</span> <span class="n">get_class</span><span class="p">(</span> <span class="n">trigger_specs</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span> <span class="p">)</span>
+            <span class="n">trigger</span> <span class="o">=</span> <span class="n">TriggerClass</span><span class="p">(</span><span class="o">**</span><span class="n">trigger_specs</span><span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">])</span>
+            <span class="n">umpire</span><span class="o">.</span><span class="n">termination_triggers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">trigger</span> <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">critic_specs</span> <span class="ow">in</span> <span class="n">umpire_specs</span><span class="p">[</span><span class="s1">&#39;critics&#39;</span><span class="p">]</span> <span class="p">:</span>
+            <span class="n">CriticClass</span> <span class="o">=</span> <span class="n">get_class</span><span class="p">(</span> <span class="n">critic_specs</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">])</span>
+            <span class="n">critic</span> <span class="o">=</span> <span class="n">CriticClass</span><span class="p">(</span> <span class="o">**</span><span class="n">critic_specs</span><span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">])</span>
+            <span class="n">umpire</span><span class="o">.</span><span class="n">performance_critics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">critic</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">umpire</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="MultiAgentSimulation.default_scenario"><a class="viewcode-back" href="../../ace_zero.simulation.html#ace_zero.simulation.MultiAgentSimulation.default_scenario">[docs]</a>    <span class="k">def</span> <span class="nf">default_scenario</span><span class="p">():</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;tmin&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s1">&#39;umpire&#39;</span> <span class="p">:</span> <span class="p">{</span>
+                        <span class="s1">&#39;triggers&#39;</span> <span class="p">:</span> <span class="p">[</span>
+                                <span class="p">{</span>   <span class="s1">&#39;class&#39;</span> <span class="p">:</span> <span class="s1">&#39;umpires.triggers.MaxTimeElapsed&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;parameters&#39;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;max_time&quot;</span> <span class="p">:</span> <span class="mf">250.0</span> <span class="p">}</span>
+                                <span class="p">}</span>
+                            <span class="p">],</span>
+                        <span class="s2">&quot;critics&quot;</span> <span class="p">:</span> <span class="p">[</span>
+                                <span class="p">{</span>
+                                    <span class="s2">&quot;class&quot;</span> <span class="p">:</span> <span class="s2">&quot;umpires.critics.GunScore&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;parameters&quot;</span> <span class="p">:</span> <span class="p">{</span>    <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;Viper Gun Score&quot;</span><span class="p">,</span>
+                                                        <span class="s2">&quot;subject&quot;</span> <span class="p">:</span> <span class="s2">&quot;viper&quot;</span><span class="p">,</span>
+                                                        <span class="s2">&quot;object&quot;</span> <span class="p">:</span> <span class="s2">&quot;cobra&quot;</span><span class="p">,</span>
+                                                        <span class="s2">&quot;max_range&quot;</span> <span class="p">:</span> <span class="mf">600.0</span><span class="p">,</span>
+                                                        <span class="s2">&quot;max_angle&quot;</span> <span class="p">:</span> <span class="mf">20.0</span> <span class="p">}</span>
+                                <span class="p">},</span>
+                                <span class="p">{</span>
+                                    <span class="s2">&quot;class&quot;</span> <span class="p">:</span> <span class="s2">&quot;umpires.critics.GunScore&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;parameters&quot;</span> <span class="p">:</span> <span class="p">{</span>    <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;Cobra Gun Score&quot;</span><span class="p">,</span>
+                                                        <span class="s2">&quot;subject&quot;</span> <span class="p">:</span> <span class="s2">&quot;cobra&quot;</span><span class="p">,</span>
+                                                        <span class="s2">&quot;object&quot;</span> <span class="p">:</span> <span class="s2">&quot;viper&quot;</span><span class="p">,</span>
+                                                        <span class="s2">&quot;max_range&quot;</span> <span class="p">:</span> <span class="mf">600.0</span><span class="p">,</span>
+                                                        <span class="s2">&quot;max_angle&quot;</span> <span class="p">:</span> <span class="mf">20.0</span> <span class="p">}</span>
+                                <span class="p">}</span>
+                        <span class="p">]</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;dt&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="s1">&#39;blue&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;initial&#39;</span><span class="p">:</span> <span class="s1">r&#39;data/blue.json&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;agent_class&#39;</span><span class="p">:</span> <span class="s1">&#39;agents.fsm_agent.stern_conversion.SternConversionAgent&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;agent_parameters&#39;</span><span class="p">:</span> <span class="s1">r&#39;data/blue_tactics.json&#39;</span><span class="p">},</span>
+                <span class="s1">&#39;red&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;initial&#39;</span><span class="p">:</span> <span class="s1">r&#39;data/red.json&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;agent_class&#39;</span><span class="p">:</span> <span class="s1">&#39;agents.agent.Agent&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;agent_parameters&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}}</span></div></div>
+
+
+<div class="viewcode-block" id="get_class"><a class="viewcode-back" href="../../ace_zero.simulation.html#ace_zero.simulation.get_class">[docs]</a><span class="k">def</span> <span class="nf">get_class</span><span class="p">(</span><span class="n">class_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;  Returns a class given its full path (packages.module.class). &quot;&quot;&quot;</span>
+    <span class="n">module_name</span><span class="p">,</span> <span class="n">class_name</span> <span class="o">=</span> <span class="n">class_path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ImportedClass</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_name</span><span class="p">),</span> <span class="n">class_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ImportedClass</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="c1"># TODO: replace with logger fatal</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fatal: Agent class specified in scenario could not be imported &#39;&quot;</span>
+                <span class="o">+</span> <span class="n">class_path</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+        <span class="k">raise</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

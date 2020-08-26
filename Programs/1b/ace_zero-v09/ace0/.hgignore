@@ -1,0 +1,13 @@
+# use glob syntax.
+syntax: glob
+
+.directory
+*.pyc
+*~
+*.o
+*.tgz
+*.tbz2
+*.gz
+*.bz2
+*.swp
+*.log

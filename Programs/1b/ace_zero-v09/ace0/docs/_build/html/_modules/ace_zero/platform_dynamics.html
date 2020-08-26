@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.platform_dynamics &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>ace_zero.platform_dynamics</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ace_zero.platform_dynamics</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/env python </span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Platform Dynamics Model</span>
+
+<span class="sd">This is a simple flight dynamics that is by no means realistic.</span>
+<span class="sd">It can be described as an arcade level flight dynamics model.</span>
+<span class="sd">It isn&#39;t quite complete and still needs tuning. </span>
+
+<span class="sd">Internally the model uses SI units (metres, m/s etc.)</span>
+
+<span class="sd">The platform dynamics model is represented by a number of state </span>
+<span class="sd">variables:</span>
+
+<span class="sd">- Position (x, y, z)</span>
+<span class="sd">- Orientation (psi, theta, phi) or (yaw, pitch, roll)</span>
+<span class="sd">- Speed (v)</span>
+<span class="sd">- Weight (m) and Fuel (fuel)</span>
+
+<span class="sd">Note that the weight of the aircraft and the fuel are not taken into</span>
+<span class="sd">account in the dynamics calculations. This will be added at future date.</span>
+
+<span class="sd">Also, we haven&#39;t modelled angle of attack (alpha) or slide-slip angle (beta).</span>
+<span class="sd">The aircraft&#39;s velocity vector will be the direction it&#39;s nose is pointed at.</span>
+
+<span class="sd">TODO:</span>
+<span class="sd">- Move the control law variables out of the code and into the data files.</span>
+<span class="sd">- Add roll angle and the ability to turn at different g-forces</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;mikepsn&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.constants</span>
+<span class="kn">import</span> <span class="nn">utils</span> <span class="k">as</span> <span class="nn">ut</span>
+
+
+<div class="viewcode-block" id="PlatformDynamics"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics">[docs]</a><span class="k">class</span> <span class="nc">PlatformDynamics</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The platform model is defined by the following state variables:</span>
+<span class="sd">    Position: x, y, z (metres)</span>
+<span class="sd">    Orientation: psi, theta, phi (yaw, pitch, roll) in (degrees)</span>
+<span class="sd">    Mass/Fuel: (kg) - for the future.</span>
+<span class="sd">    </span>
+<span class="sd">    Additionally, the model keeps of track of a number of commanded/desired</span>
+<span class="sd">    values. Theses are:</span>
+<span class="sd">    z_c - desired/commanded altitude</span>
+<span class="sd">    psi_c - desired/commanded yaw angle psi</span>
+<span class="sd">    theta_c - desired/commanded pitch angle theta</span>
+<span class="sd">    v_c - desired/command speed v</span>
+
+<span class="sd">    The model also keeps track of it&#39;s trajectory through 3D space for plotting</span>
+<span class="sd">    purposes. This is stored as a list of tuples in the self.trace atttribute.</span>
+<span class="sd">    Each tuple in the list represents the state of the aircraft at a single</span>
+<span class="sd">    time step. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">psi</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">v</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">v_min</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">v_max</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">v_K</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">theta_K</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">psi_K</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">gload_max</span><span class="o">=</span><span class="mf">9.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">=</span> <span class="n">psi</span>          <span class="c1"># heading</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span>      <span class="c1"># pitch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">phi</span>          <span class="c1"># roll</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">v</span>              <span class="c1"># velocity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gload</span> <span class="o">=</span> <span class="mf">1.0</span>        <span class="c1"># current gload factor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fuel</span> <span class="o">=</span> <span class="n">fuel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_min</span> <span class="o">=</span> <span class="n">v_min</span>      <span class="c1"># platform minimum velocity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_max</span> <span class="o">=</span> <span class="n">v_max</span>      <span class="c1"># platform maximum velocity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gload_max</span> <span class="o">=</span> <span class="n">gload_max</span> <span class="c1"># Maximum allowed gload</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_K</span> <span class="o">=</span> <span class="n">v_K</span>          <span class="c1"># velocity change constant</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta_K</span> <span class="o">=</span> <span class="n">theta_K</span>  <span class="c1"># pitch angle change constant</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_K</span> <span class="o">=</span> <span class="n">psi_K</span>      <span class="c1"># turn rate constant</span>
+
+        <span class="c1"># Desired values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Printer friendly representation of the aircraft state. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;(</span><span class="si">%3.2f</span><span class="s2">, </span><span class="si">%3.2f</span><span class="s2">, </span><span class="si">%3.2f</span><span class="s2">) : (</span><span class="si">%3.2f</span><span class="s2">, </span><span class="si">%3.2f</span><span class="s2">, </span><span class="si">%3.2f</span><span class="s2">) : (</span><span class="si">%3.2f</span><span class="s2">, </span><span class="si">%3.2f</span><span class="s2">, </span><span class="si">%3.2f</span><span class="s2">)&quot;</span> <span class="o">%</span> \
+                     <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> \
+                     <span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span> \
+                     <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuel</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PlatformDynamics.record_trace"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.record_trace">[docs]</a>    <span class="k">def</span> <span class="nf">record_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Appends the current state of the aircraft to the trace list. &quot;&quot;&quot;</span>
+        <span class="n">timeslice</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> 
+                     <span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span> 
+                     <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timeslice</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.tick"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.tick">[docs]</a>    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ticks the platform model for the current time step.</span>
+<span class="sd">        - Records the aircraft trace</span>
+<span class="sd">        - Controls the aircraft yaw, speed and pitch</span>
+<span class="sd">        - Updates the aircraft dynamics equations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">record_trace</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yaw_control</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed_control</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pitch_control</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_platform</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.update_platform"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.update_platform">[docs]</a>    <span class="k">def</span> <span class="nf">update_platform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solves the equations of motion for the current timestep and determines</span>
+<span class="sd">        the new position (xn, yn, zn) of the aircraft. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">)</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gload</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> 
+        <span class="n">xn</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span>
+        <span class="n">yn</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span>
+        <span class="n">zn</span> <span class="o">=</span> <span class="n">z</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">xn</span><span class="p">,</span> <span class="n">yn</span><span class="p">,</span> <span class="n">zn</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.set_position"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.set_position">[docs]</a>    <span class="k">def</span> <span class="nf">set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the aircraft position to (x, y). &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.get_position"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.get_position">[docs]</a>    <span class="k">def</span> <span class="nf">get_position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the aircraft position. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.set_altitude"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.set_altitude">[docs]</a>    <span class="k">def</span> <span class="nf">set_altitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the aircraft altitude to z. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">z</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.set_gload"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.set_gload">[docs]</a>    <span class="k">def</span> <span class="nf">set_gload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gload</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the aircraft g load factor. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gload</span> <span class="o">=</span> <span class="n">gload</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.get_altitude"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.get_altitude">[docs]</a>    <span class="k">def</span> <span class="nf">get_altitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the aircraft&#39;s current altitude &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.get_orientation"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.get_orientation">[docs]</a>    <span class="k">def</span> <span class="nf">get_orientation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the aircraft&#39;s yaw, pitch and roll angles as a tuple. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.get_speed"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.get_speed">[docs]</a>    <span class="k">def</span> <span class="nf">get_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the aircraft&#39;s current speed. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.speed_cmd"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.speed_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">speed_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the desired/commanded speed v_c. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_c</span> <span class="o">=</span> <span class="n">vc</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.altitude_cmd"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.altitude_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">altitude_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zc</span><span class="p">,</span> <span class="n">theta_c</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; DEPRECATED</span>
+<span class="sd">        Issues an altitude command by setting a desired altitude</span>
+<span class="sd">        z_c and a desired pitch angle theta_c. Note that this type of</span>
+<span class="sd">        alitude control has been moved into the flight control model</span>
+<span class="sd">        and hence this method is deprecated. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_c</span> <span class="o">=</span> <span class="n">zc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta_c</span> <span class="o">=</span> <span class="n">theta_c</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.yaw_cmd"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.yaw_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">yaw_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psi_c</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the desired/commanded yaw angle psi_c &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_c</span> <span class="o">=</span> <span class="n">psi_c</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.pitch_cmd"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.pitch_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">pitch_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta_c</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the desired/commanded pitch angle theta_c &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta_c</span> <span class="o">=</span> <span class="n">theta_c</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.roll_cmd"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.roll_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">roll_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi_c</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the desired roll angle phi_c  &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi_c</span> <span class="o">=</span> <span class="n">phi_c</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.speed_control"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.speed_control">[docs]</a>    <span class="k">def</span> <span class="nf">speed_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Linear control law to adjust aircraft speed. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">v_tolerance</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">v_err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_c</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_K</span> <span class="o">*</span> <span class="n">v_err</span> <span class="o">*</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v_max</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_min</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.altitude_control"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.altitude_control">[docs]</a>    <span class="k">def</span> <span class="nf">altitude_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NOTE: DEPRECATED</span>
+<span class="sd">        Control law for altitude. Note that this</span>
+<span class="sd">        has been moved to the flight control system </span>
+<span class="sd">        and is now deprecated here.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">altitude_tolerance</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">zerr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z_c</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">zerr</span> <span class="o">&gt;</span> <span class="n">altitude_tolerance</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pitch_control</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_c</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pitch_cmd</span><span class="p">(</span><span class="n">theta_c</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pitch_control</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.pitch_control"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.pitch_control">[docs]</a>    <span class="k">def</span> <span class="nf">pitch_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Linear control law for pitch control. </span>
+<span class="sd">        TODO: </span>
+<span class="sd">        - The control variable K_theta really needs to be tuned</span>
+<span class="sd">        - Should we set up/lower limits for the pitch angle?</span>
+<span class="sd">        - Move the control variables to a data file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pitch_tolerance</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">3</span>
+        <span class="n">theta_rate</span><span class="p">,</span> <span class="n">theta_min</span><span class="p">,</span> <span class="n">theta_max</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">70.0</span><span class="p">,</span> <span class="mf">70.0</span><span class="p">)</span>
+        <span class="n">theta_err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta_c</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta_K</span> <span class="o">*</span> <span class="n">theta_err</span> <span class="o">*</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">theta_max</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">),</span> <span class="n">theta_min</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.roll_control"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.roll_control">[docs]</a>    <span class="k">def</span> <span class="nf">roll_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Roll Control &quot;&quot;&quot;</span>
+        <span class="n">roll_tolerance</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">3</span>
+        <span class="n">roll_err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi_c</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">roll_err</span> <span class="o">*</span> <span class="n">dt</span></div>
+
+<div class="viewcode-block" id="PlatformDynamics.yaw_control"><a class="viewcode-back" href="../../ace_zero.platform_dynamics.html#ace_zero.platform_dynamics.PlatformDynamics.yaw_control">[docs]</a>    <span class="k">def</span> <span class="nf">yaw_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Linear control law for yaw control. </span>
+<span class="sd">        TODO: Still need to tune control parameters/variables.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">psi_tolerance</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">constrain_360</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_c</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">smallest_angle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+            <span class="c1"># Calculate the turn rate based on the bank angle</span>
+            <span class="c1"># The turn rate omega is defined as</span>
+            <span class="c1"># omega = g tan(phi) / v</span>
+            <span class="c1"># where v is the velocity</span>
+            <span class="c1"># Take the absolute value of the turn rate omega</span>
+            <span class="c1"># We then need to convert omega into deg/s from rad/s</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">g</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">g</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">))</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">omega</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">psi_tolerance</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_K</span> <span class="o">*</span> <span class="n">dt</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">roll_cmd</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">phi_c</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_K</span> <span class="o">*</span> <span class="n">dt</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_c</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">roll_cmd</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">roll_control</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">constrain_360</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">)</span></div></div>
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to ace_zero’s documentation! &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="#"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Welcome to ace_zero&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#xcombat">XCombat</a></li>
+<li><a class="reference internal" href="#running-ace-zero">Running ACE ZERO</a></li>
+<li><a class="reference internal" href="#optional">Optional</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="#">Docs</a> &raquo;</li>
+      
+    <li>Welcome to ace_zero&#8217;s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/index.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-ace-zero-s-documentation">
+<h1>Welcome to ace_zero&#8217;s documentation!<a class="headerlink" href="#welcome-to-ace-zero-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>ACE ZERO is a prototype environment for undertaking multi-agent simulation
+research. Click on the Modules Index link below to find the source code
+documentation.</p>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>You will need to install Python 2.7 with the Python scientific computing stack
+(NumPy, SciPy, matplotlib etc.) We have been using the Anaconda scientific
+Python distribution. You can download versions for Windows, Mac and Linux from
+<a class="reference external" href="http://www.continuum.io/">Continuum Analytics</a>.</p>
+</div>
+<div class="section" id="xcombat">
+<h1>XCombat<a class="headerlink" href="#xcombat" title="Permalink to this headline">¶</a></h1>
+<p>XCombat is (currently) a Windows 3D visualisation tool for animating and visualising
+simulation runs. XCombat is executed on the command line with a history (.his) file
+as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">xcombat</span><span class="o">.</span><span class="n">exe</span> <span class="n">myhistory</span><span class="o">.</span><span class="n">his</span>
+</pre></div>
+</div>
+<p>XCombat can be run separately from ACE ZERO or it can be called from within
+ACE ZERO so you immediately see the results of a simulation run.</p>
+<p>You can install XCombat anywhere you like and tell ACE ZERO where to find it (see below).</p>
+</div>
+<div class="section" id="running-ace-zero">
+<h1>Running ACE ZERO<a class="headerlink" href="#running-ace-zero" title="Permalink to this headline">¶</a></h1>
+<p>ACE ZERO is run on the command line as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">ace_zero</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">noxcombat</span>
+</pre></div>
+</div>
+<p>It is useful to specifiy a specific scenario and also to tell ACE ZERO where to find
+the xcombat executable. This is done as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">python</span> <span class="o">.</span>\<span class="n">ace_zero</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">xcombat_path</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">mikep</span>\<span class="n">Desktop</span>\<span class="n">xcombat34</span>\<span class="n">xcombat34</span><span class="o">.</span><span class="n">exe</span> <span class="o">--</span><span class="n">scenario</span> <span class="o">.</span>\<span class="n">test</span>\<span class="n">test_goal_agent</span>\<span class="n">goal_agent_scenario</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>Change the xcombat path to where you have installed it. In the above example the scenario being run is a simple one which just tests out a series
+of commands given to a test agent known as the goal agent.</p>
+</div>
+<div class="section" id="optional">
+<h1>Optional<a class="headerlink" href="#optional" title="Permalink to this headline">¶</a></h1>
+<p>If you want to build the docs you will also need the sphinx_rtd_theme. You can install
+it as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">sphix_rtd_theme</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

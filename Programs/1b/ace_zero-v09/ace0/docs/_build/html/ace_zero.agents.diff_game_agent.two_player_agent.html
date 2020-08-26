@@ -1,0 +1,242 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.agents.diff_game_agent.two_player_agent module &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ace_zero.agents.diff_game_agent.two_player_agent module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>ace_zero.agents.diff_game_agent.two_player_agent module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ace_zero.agents.diff_game_agent.two_player_agent.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ace_zero.agents.diff_game_agent.two_player_agent">
+<span id="ace-zero-agents-diff-game-agent-two-player-agent-module"></span><h1>ace_zero.agents.diff_game_agent.two_player_agent module<a class="headerlink" href="#module-ace_zero.agents.diff_game_agent.two_player_agent" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.diff_game_agent.two_player_agent.</code><code class="descname">TwoPlayerAgent</code><span class="sig-paren">(</span><em>plant_data_source_blue</em>, <em>plant_data_source_red</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/two_player_agent.html#TwoPlayerAgent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base agent for game theoretical agents.</p>
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.clone_environment">
+<code class="descname">clone_environment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/two_player_agent.html#TwoPlayerAgent.clone_environment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.clone_environment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clones the current world state</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.compute_successor">
+<code class="descname">compute_successor</code><span class="sig-paren">(</span><em>blue_control</em>, <em>red_control</em>, <em>T</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/two_player_agent.html#TwoPlayerAgent.compute_successor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.compute_successor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.get_commands">
+<code class="descname">get_commands</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/two_player_agent.html#TwoPlayerAgent.get_commands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.get_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of commands from the agent.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>([object]): the list of commands</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.set_beliefs">
+<code class="descname">set_beliefs</code><span class="sig-paren">(</span><em>beliefs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/two_player_agent.html#TwoPlayerAgent.set_beliefs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.set_beliefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the beliefs of the agent and all sub-states.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>beliefs (object): object defining the agent beliefs about the world</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.setup_plant_instance">
+<code class="descname">setup_plant_instance</code><span class="sig-paren">(</span><em>datasource</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/two_player_agent.html#TwoPlayerAgent.setup_plant_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.setup_plant_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.sync_plant_state">
+<code class="descname">sync_plant_state</code><span class="sig-paren">(</span><em>plant</em>, <em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/two_player_agent.html#TwoPlayerAgent.sync_plant_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.sync_plant_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/diff_game_agent/two_player_agent.html#TwoPlayerAgent.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.diff_game_agent.two_player_agent.TwoPlayerAgent.tick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

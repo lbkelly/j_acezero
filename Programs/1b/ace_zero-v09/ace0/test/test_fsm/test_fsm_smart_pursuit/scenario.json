@@ -1,0 +1,26 @@
+{
+  "name": "Stern Conversion, FSM Agent vs. Agent",
+  "tmin": 0.0,
+  "umpire": {
+    "triggers": [
+      {
+        "class": "umpires.triggers.MaxTimeElapsed",
+        "parameters": {
+          "max_time": 350.0
+        }
+      }
+    ],
+    "critics": []
+  },
+  "dt": 0.1,
+  "blue": {
+    "initial": "blue.json",
+    "agent_class": "agents.fsm_agent.smart_pursuit.SmartPursuitAgent",
+    "agent_parameters": "blue_params.json"
+  },
+  "red": {
+    "initial": "red.json",
+    "agent_class": "agents.agent.Agent",
+    "agent_parameters": "red_params.json"
+  }
+}

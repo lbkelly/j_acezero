@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.test.test_fsm.test_fsm_agent &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../../index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      
+    <li>ace_zero.test.test_fsm.test_fsm_agent</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ace_zero.test.test_fsm.test_fsm_agent</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">unittest</span> <span class="k">import</span> <span class="n">TestCase</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">agents.fsm_agent.state_agent</span> <span class="k">import</span> <span class="n">StateAgent</span>
+
+
+<div class="viewcode-block" id="TestFSMAgent"><a class="viewcode-back" href="../../../../ace_zero.test.test_fsm.test_fsm_agent.html#ace_zero.test.test_fsm.test_fsm_agent.TestFSMAgent">[docs]</a><span class="k">class</span> <span class="nc">TestFSMAgent</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestFSMAgent.setUp"><a class="viewcode-back" href="../../../../ace_zero.test.test_fsm.test_fsm_agent.html#ace_zero.test.test_fsm.test_fsm_agent.TestFSMAgent.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Change working directory to the directory of this test so paths work</span>
+        <span class="n">abspath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+        <span class="n">dname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">dname</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestFSMAgent.test_default_fsm"><a class="viewcode-back" href="../../../../ace_zero.test.test_fsm.test_fsm_agent.html#ace_zero.test.test_fsm.test_fsm_agent.TestFSMAgent.test_default_fsm">[docs]</a>    <span class="k">def</span> <span class="nf">test_default_fsm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Tests that the agent can be initialised. &quot;&quot;&quot;</span>
+        <span class="n">agent</span> <span class="o">=</span> <span class="n">StateAgent</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestFSMAgent.test_state_initialisation"><a class="viewcode-back" href="../../../../ace_zero.test.test_fsm.test_fsm_agent.html#ace_zero.test.test_fsm.test_fsm_agent.TestFSMAgent.test_state_initialisation">[docs]</a>    <span class="k">def</span> <span class="nf">test_state_initialisation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Tests that states are correctly stored and initialised. &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">State1</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="k">class</span> <span class="nc">State2</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="k">class</span> <span class="nc">State3</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="n">state1</span> <span class="o">=</span> <span class="n">State1</span><span class="p">()</span>
+        <span class="n">state2</span> <span class="o">=</span> <span class="n">State2</span><span class="p">()</span>
+        <span class="n">state3</span> <span class="o">=</span> <span class="n">State3</span><span class="p">()</span>
+
+        <span class="c1"># Test that the default initial active states list is empty if</span>
+        <span class="c1"># auto_initial is False and no initial state is specified</span>
+        <span class="n">agent</span> <span class="o">=</span> <span class="n">StateAgent</span><span class="p">([</span><span class="n">state3</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">state2</span><span class="p">],</span> <span class="n">auto_initial</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">state_names</span><span class="p">(),</span> <span class="p">[</span><span class="s2">&quot;State3&quot;</span><span class="p">,</span> <span class="s2">&quot;State1&quot;</span><span class="p">,</span> <span class="s2">&quot;State2&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[])</span>
+
+        <span class="c1"># Test that the default initial active state is the first state in the</span>
+        <span class="c1"># list if auto_initial is True</span>
+        <span class="n">agent</span> <span class="o">=</span> <span class="n">StateAgent</span><span class="p">([</span><span class="n">state3</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">state2</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">state_names</span><span class="p">(),</span> <span class="p">[</span><span class="s2">&quot;State3&quot;</span><span class="p">,</span> <span class="s2">&quot;State1&quot;</span><span class="p">,</span> <span class="s2">&quot;State2&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state3</span><span class="p">])</span>
+
+        <span class="c1"># Test that the initial active state can be set explicitly</span>
+        <span class="n">agent</span> <span class="o">=</span> <span class="n">StateAgent</span><span class="p">([</span><span class="n">state3</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">state2</span><span class="p">],</span> <span class="n">initial</span><span class="o">=</span><span class="n">State1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">state_names</span><span class="p">(),</span> <span class="p">[</span><span class="s2">&quot;State3&quot;</span><span class="p">,</span> <span class="s2">&quot;State1&quot;</span><span class="p">,</span> <span class="s2">&quot;State2&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state1</span><span class="p">])</span>
+
+        <span class="c1"># Test that multiple initial states may be set</span>
+        <span class="n">agent</span> <span class="o">=</span> <span class="n">StateAgent</span><span class="p">([</span><span class="n">state3</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">state2</span><span class="p">],</span> <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="n">State1</span><span class="p">,</span> <span class="n">State2</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">state_names</span><span class="p">(),</span> <span class="p">[</span><span class="s2">&quot;State3&quot;</span><span class="p">,</span> <span class="s2">&quot;State1&quot;</span><span class="p">,</span> <span class="s2">&quot;State2&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertItemsEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state1</span><span class="p">,</span> <span class="n">state2</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="TestFSMAgent.test_single_transition_single_active_state"><a class="viewcode-back" href="../../../../ace_zero.test.test_fsm.test_fsm_agent.html#ace_zero.test.test_fsm.test_fsm_agent.TestFSMAgent.test_single_transition_single_active_state">[docs]</a>    <span class="k">def</span> <span class="nf">test_single_transition_single_active_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Tests that states can request transitions successfully. &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">State1</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">State3</span>
+
+        <span class="k">class</span> <span class="nc">State2</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">State1</span>
+
+        <span class="k">class</span> <span class="nc">State3</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">State2</span>
+
+        <span class="n">state1</span> <span class="o">=</span> <span class="n">State1</span><span class="p">()</span>
+        <span class="n">state2</span> <span class="o">=</span> <span class="n">State2</span><span class="p">()</span>
+        <span class="n">state3</span> <span class="o">=</span> <span class="n">State3</span><span class="p">()</span>
+
+        <span class="n">agent</span> <span class="o">=</span> <span class="n">StateAgent</span><span class="p">([</span><span class="n">state2</span><span class="p">,</span> <span class="n">state3</span><span class="p">,</span> <span class="n">state1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state2</span><span class="p">])</span>
+
+        <span class="c1"># Trigger transition request in State2 then check transition to State1</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state1</span><span class="p">])</span>
+
+        <span class="c1"># Trigger transition request in State1 then check transition to State3</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state3</span><span class="p">])</span>
+
+        <span class="c1"># Trigger transition request in State3 then check transition to State2</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state2</span><span class="p">])</span>
+
+        <span class="c1"># Trigger another transition request in State2</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="TestFSMAgent.test_single_transition_multiple_active_states"><a class="viewcode-back" href="../../../../ace_zero.test.test_fsm.test_fsm_agent.html#ace_zero.test.test_fsm.test_fsm_agent.TestFSMAgent.test_single_transition_multiple_active_states">[docs]</a>    <span class="k">def</span> <span class="nf">test_single_transition_multiple_active_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Tests that a single transition is executed when there are multiple</span>
+<span class="sd">        active states. &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">State1</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">State3</span>
+
+        <span class="k">class</span> <span class="nc">State2</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="k">class</span> <span class="nc">State3</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">State1</span>
+
+        <span class="n">state1</span> <span class="o">=</span> <span class="n">State1</span><span class="p">()</span>
+        <span class="n">state2</span> <span class="o">=</span> <span class="n">State2</span><span class="p">()</span>
+        <span class="n">state3</span> <span class="o">=</span> <span class="n">State3</span><span class="p">()</span>
+
+        <span class="n">agent</span> <span class="o">=</span> <span class="n">StateAgent</span><span class="p">([</span><span class="n">state1</span><span class="p">,</span> <span class="n">state3</span><span class="p">,</span> <span class="n">state2</span><span class="p">],</span> <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="n">State1</span><span class="p">,</span> <span class="n">State2</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertItemsEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state1</span><span class="p">,</span> <span class="n">state2</span><span class="p">])</span>
+
+        <span class="c1"># Trigger transition request in State1 then check transition to State3</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertItemsEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state2</span><span class="p">,</span> <span class="n">state3</span><span class="p">])</span>
+
+        <span class="c1"># Trigger transition request in State3 then check transition to State1</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertItemsEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state2</span><span class="p">,</span> <span class="n">state1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="TestFSMAgent.test_multiple_transitions"><a class="viewcode-back" href="../../../../ace_zero.test.test_fsm.test_fsm_agent.html#ace_zero.test.test_fsm.test_fsm_agent.TestFSMAgent.test_multiple_transitions">[docs]</a>    <span class="k">def</span> <span class="nf">test_multiple_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Tests that multiple transitions can be executed at once. &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">State1</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">State2</span>
+
+        <span class="k">class</span> <span class="nc">State2</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">State3</span>
+
+        <span class="k">class</span> <span class="nc">State3</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">State4</span>
+
+        <span class="k">class</span> <span class="nc">State4</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transition_request</span> <span class="o">=</span> <span class="n">State1</span>
+
+        <span class="n">state1</span> <span class="o">=</span> <span class="n">State1</span><span class="p">()</span>
+        <span class="n">state2</span> <span class="o">=</span> <span class="n">State2</span><span class="p">()</span>
+        <span class="n">state3</span> <span class="o">=</span> <span class="n">State3</span><span class="p">()</span>
+        <span class="n">state4</span> <span class="o">=</span> <span class="n">State4</span><span class="p">()</span>
+
+        <span class="n">agent</span> <span class="o">=</span> <span class="n">StateAgent</span><span class="p">([</span><span class="n">state1</span><span class="p">,</span> <span class="n">state3</span><span class="p">,</span> <span class="n">state2</span><span class="p">,</span> <span class="n">state4</span><span class="p">],</span>
+                <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="n">State1</span><span class="p">,</span> <span class="n">State3</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertItemsEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state1</span><span class="p">,</span> <span class="n">state3</span><span class="p">])</span>
+
+        <span class="c1"># Trigger transition request in both State1 and State3</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertItemsEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state2</span><span class="p">,</span> <span class="n">state4</span><span class="p">])</span>
+
+        <span class="c1"># Trigger transition request in State2 and State4 and check transition</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">process_state</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertItemsEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state1</span><span class="p">,</span> <span class="n">state3</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="TestFSMAgent.test_execution"><a class="viewcode-back" href="../../../../ace_zero.test.test_fsm.test_fsm_agent.html#ace_zero.test.test_fsm.test_fsm_agent.TestFSMAgent.test_execution">[docs]</a>    <span class="k">def</span> <span class="nf">test_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Test that state behaviour is executed for a single active state. &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">State1</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">test_execution_value</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">state1</span> <span class="o">=</span> <span class="n">State1</span><span class="p">()</span>
+        <span class="n">state1</span><span class="o">.</span><span class="n">test_execution_value</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">agent</span> <span class="o">=</span> <span class="n">StateAgent</span><span class="p">([</span><span class="n">state1</span><span class="p">],</span> <span class="n">initial</span><span class="o">=</span><span class="n">State1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">state_names</span><span class="p">(),</span> <span class="p">[</span><span class="s2">&quot;State1&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state1</span><span class="p">])</span>
+
+        <span class="c1"># Execute the active state then test that the value was updated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state1</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state1</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state1</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state1</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestFSMAgent.test_execution_multiple_active_states"><a class="viewcode-back" href="../../../../ace_zero.test.test_fsm.test_fsm_agent.html#ace_zero.test.test_fsm.test_fsm_agent.TestFSMAgent.test_execution_multiple_active_states">[docs]</a>    <span class="k">def</span> <span class="nf">test_execution_multiple_active_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Test that state behaviour is executed correctly for multiple active</span>
+<span class="sd">        states. &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">State1</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">test_execution_value</span> <span class="o">+=</span> <span class="mi">5</span>
+
+        <span class="k">class</span> <span class="nc">State2</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">test_execution_value</span> <span class="o">+=</span> <span class="mi">15</span>
+
+        <span class="k">class</span> <span class="nc">State3</span><span class="p">(</span><span class="n">StateAgent</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="n">StateAgent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">test_execution_value</span> <span class="o">+=</span> <span class="mi">100</span>
+
+        <span class="n">state1</span> <span class="o">=</span> <span class="n">State1</span><span class="p">()</span>
+        <span class="n">state1</span><span class="o">.</span><span class="n">test_execution_value</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">state2</span> <span class="o">=</span> <span class="n">State2</span><span class="p">()</span>
+        <span class="n">state2</span><span class="o">.</span><span class="n">test_execution_value</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="n">state3</span> <span class="o">=</span> <span class="n">State3</span><span class="p">()</span>
+        <span class="n">state3</span><span class="o">.</span><span class="n">test_execution_value</span> <span class="o">=</span> <span class="mi">30</span>
+
+        <span class="n">agent</span> <span class="o">=</span> <span class="n">StateAgent</span><span class="p">([</span><span class="n">state1</span><span class="p">,</span> <span class="n">state3</span><span class="p">,</span> <span class="n">state2</span><span class="p">],</span>
+                           <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="n">State1</span><span class="p">,</span> <span class="n">State2</span><span class="p">,</span> <span class="n">State3</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertItemsEqual</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">active_states</span><span class="p">,</span> <span class="p">[</span><span class="n">state1</span><span class="p">,</span> <span class="n">state2</span><span class="p">,</span> <span class="n">state3</span><span class="p">])</span>
+
+        <span class="c1"># Execute active states then test that values were updated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state1</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state2</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state3</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state1</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state2</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">35</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state3</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">130</span><span class="p">)</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state1</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state2</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">state3</span><span class="o">.</span><span class="n">test_execution_value</span><span class="p">,</span> <span class="mi">230</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

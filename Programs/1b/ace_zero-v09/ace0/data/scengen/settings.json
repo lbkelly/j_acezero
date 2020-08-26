@@ -1,0 +1,31 @@
+{
+    "agents" : [
+        {   "name" : "hp",
+            "classname" : "agents.ap_agent.stern_conversion.agent.SternConversionAgent",
+            "args" : []
+        },
+        {   "name" : "dg",
+            "classname" : "agents.diff_game_agent.park_stern_conversion.SternConversionAgent",
+            "args" : [ "data/park_maneuvers.json" ]
+        },
+        {   "name" : "scfsm",
+            "classname" : "agents.fsm_agent.stern_conversion.SternConversionAgent",
+            "args" : ["data/blue_tactics.json"]
+        },
+        {   "name" : "pfsm",
+            "classname" : "agents.fsm_agent.pursuit.PurePursuitAgent",
+            "args" : ["data/blue_tactics.json"]
+        }
+    ],
+    "defaults" : {
+        "sim" : {
+            "duration" : 60.0,
+            "dt" : 0.1,
+            "sides" : ["blue", "red"]
+        }
+    },
+    "aircraft" : [
+        "data/aircraft/generic.aerodynamics.json"
+    ]
+
+}

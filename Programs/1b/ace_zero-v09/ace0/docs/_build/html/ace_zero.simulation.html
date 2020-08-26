@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.simulation module &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ace_zero.simulation module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>ace_zero.simulation module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ace_zero.simulation.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ace_zero.simulation">
+<span id="ace-zero-simulation-module"></span><h1>ace_zero.simulation module<a class="headerlink" href="#module-ace_zero.simulation" title="Permalink to this headline">¶</a></h1>
+<p>Multi-agent simulation of two fighter aircraft in a 1v1 configuration.</p>
+<dl class="class">
+<dt id="ace_zero.simulation.MultiAgentSimulation">
+<em class="property">class </em><code class="descclassname">ace_zero.simulation.</code><code class="descname">MultiAgentSimulation</code><span class="sig-paren">(</span><em>scenario=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/simulation.html#MultiAgentSimulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.simulation.MultiAgentSimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A simple time stepped multi-agent simulation consisting of two fighter
+aircraft in a 1v1 adversarial Within Visual Range (WVR) air combat scenario.</p>
+<p>The simulation is defined by a json file that specifies the initial
+conditions and agents for the fighters in the scenario.</p>
+<dl class="staticmethod">
+<dt id="ace_zero.simulation.MultiAgentSimulation.default_scenario">
+<em class="property">static </em><code class="descname">default_scenario</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/simulation.html#MultiAgentSimulation.default_scenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.simulation.MultiAgentSimulation.default_scenario" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="ace_zero.simulation.MultiAgentSimulation.get_fighter">
+<em class="property">static </em><code class="descname">get_fighter</code><span class="sig-paren">(</span><em>initial</em>, <em>agent_class</em>, <em>agent_params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/simulation.html#MultiAgentSimulation.get_fighter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.simulation.MultiAgentSimulation.get_fighter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a Fighter with the specified initial conditions and agent.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first docutils">
+<dt>initial (string): path to the json file specifying the initial</dt>
+<dd>conditions for the fighter</dd>
+</dl>
+<p>agent_class (string): qualified name of the class of the agent
+agent_params (string): path to the json file specifying any</p>
+<blockquote class="last">
+<div>parameters required by the agent</div></blockquote>
+</dd>
+<dt>Returns:</dt>
+<dd>(Fighter): an initialised fighter entity</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="ace_zero.simulation.MultiAgentSimulation.get_umpire">
+<em class="property">static </em><code class="descname">get_umpire</code><span class="sig-paren">(</span><em>umpire_specs</em>, <em>sim</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/simulation.html#MultiAgentSimulation.get_umpire"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.simulation.MultiAgentSimulation.get_umpire" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.simulation.MultiAgentSimulation.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/simulation.html#MultiAgentSimulation.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.simulation.MultiAgentSimulation.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the simulation until the maximum run time self.tmax is reached.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.simulation.MultiAgentSimulation.setup">
+<code class="descname">setup</code><span class="sig-paren">(</span><em>scenario</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/simulation.html#MultiAgentSimulation.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.simulation.MultiAgentSimulation.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the simulation, entity and agent parameters from the specified
+scenario dictionary, and initialises two fighter entities for execution.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>scenario (dict): dictionary specifying a scenario</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.simulation.MultiAgentSimulation.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/simulation.html#MultiAgentSimulation.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.simulation.MultiAgentSimulation.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ticks each fighter aircraft.
+Gets the current state of each fighter and then passes each state to the
+opponent aircraft. Once this is done, each aircraft is then ticked.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="ace_zero.simulation.get_class">
+<code class="descclassname">ace_zero.simulation.</code><code class="descname">get_class</code><span class="sig-paren">(</span><em>class_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/simulation.html#get_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.simulation.get_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a class given its full path (packages.module.class).</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,417 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.flight_control &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>ace_zero.flight_control</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ace_zero.flight_control</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Flight Control Model</span>
+
+<span class="sd">The flight control model is the pilot&#39;s interface to the aircraft platform</span>
+<span class="sd">dynamics model. The flight control contains a platform model and can</span>
+<span class="sd">process three types/families of commands.</span>
+
+<span class="sd">These are speed commands, altitude commands and direction commands.</span>
+<span class="sd">While in a real aircraft speed, altitude and direction are coupled through</span>
+<span class="sd">the equations of motion, in this model the aircraft is somewhat &#39;arcadey&#39;.</span>
+
+<span class="sd">We&#39;ve decoupled the three types of controls allowing the pilot agent to set</span>
+<span class="sd">three independent command channels. Note that there are still some restrictions.</span>
+<span class="sd">The pilot cannot send two type of altitude commands at any given time step.</span>
+
+<span class="sd">The pilot can control the aircraft speed, altitude and direction independently.</span>
+<span class="sd">The tick method for the flight control class reflects this independence.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;mikepsn, lrbenke&#39;</span>
+
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">utils</span> <span class="k">as</span> <span class="nn">ut</span>
+<span class="kn">from</span> <span class="nn">states</span> <span class="k">import</span> <span class="n">FighterState</span>
+
+
+<div class="viewcode-block" id="FlightControl"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl">[docs]</a><span class="k">class</span> <span class="nc">FlightControl</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The flight control system is the pilot agent&#39;s interface to the aircraft</span>
+<span class="sd">    platform dynamics model. The class has a number of instance variables.</span>
+<span class="sd">    - platform model</span>
+<span class="sd">    - the current speed command</span>
+<span class="sd">    - the current altitude command</span>
+<span class="sd">    - the current direction command</span>
+<span class="sd">    The class also contains three dictionaries that map the commands</span>
+<span class="sd">    that are sent from the pilot into various methods which process</span>
+<span class="sd">    these commands and intepret them for the platform dynamics model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">platform</span> <span class="o">=</span> <span class="n">platform</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed_cmd</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">altitude_cmd</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction_cmd</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="c1"># dict mapping speed commands</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed_commands</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;SetSpeedCmd&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_set_speed_cmd</span>
+        <span class="p">}</span>
+
+            <span class="c1"># dict mapping altitude commands</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">altitude_commands</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;SetFlyLevelCmd&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_set_fly_level_cmd</span><span class="p">,</span>
+            <span class="s1">&#39;SetPitchAngleCmd&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_set_pitch_angle_cmd</span><span class="p">,</span>
+            <span class="s1">&#39;SetAltitudeCmd&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_set_altitude_cmd</span>
+        <span class="p">}</span>
+
+            <span class="c1"># dict mapping direction commands</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction_commands</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;SetHeadingCmd&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_set_heading_cmd</span><span class="p">,</span>
+            <span class="s1">&#39;SetHeadingGLoadCmd&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_set_heading_gload_cmd</span><span class="p">,</span>
+            <span class="s1">&#39;SetWaypointCmd&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_set_waypoint_cmd</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="FlightControl.get_platform_state"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.get_platform_state">[docs]</a>    <span class="k">def</span> <span class="nf">get_platform_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a FighterState object with the state of the underlying</span>
+<span class="sd">        platform model, including position, orientation and speed. &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span>
+        <span class="k">return</span> <span class="n">FighterState</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">z_c</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">psi</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">psi_c</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">theta_c</span><span class="p">,</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">phi_c</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">v_c</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">gload</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlightControl.tick"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.tick">[docs]</a>    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ticks the flight control system every time step.</span>
+<span class="sd">        Controls the speed, altitude and direction before ticking</span>
+<span class="sd">        the underlying platform model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">control_speed</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">control_altitude</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">control_direction</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlightControl.set_new_commands"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.set_new_commands">[docs]</a>    <span class="k">def</span> <span class="nf">set_new_commands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commands</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes new incoming commands according to the their cmd type.</span>
+<span class="sd">        Note if there is more than one command for a given category,</span>
+<span class="sd">        it will get over written by the last command in that category.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+            <span class="n">cmd_name</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
+            <span class="k">if</span> <span class="n">cmd_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_commands</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_speed_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cmd_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">altitude_commands</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_altitude_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cmd_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction_commands</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_direction_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlightControl.set_speed_cmd"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.set_speed_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">set_speed_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the current speed command to cmd &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed_cmd</span> <span class="o">=</span> <span class="n">cmd</span></div>
+
+<div class="viewcode-block" id="FlightControl.set_altitude_cmd"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.set_altitude_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">set_altitude_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the current altitude command to cmd &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">altitude_cmd</span> <span class="o">=</span> <span class="n">cmd</span></div>
+
+<div class="viewcode-block" id="FlightControl.set_direction_cmd"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.set_direction_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">set_direction_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the current direction command to cmd &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction_cmd</span> <span class="o">=</span> <span class="n">cmd</span></div>
+
+<div class="viewcode-block" id="FlightControl.control_speed"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.control_speed">[docs]</a>    <span class="k">def</span> <span class="nf">control_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; If there is a speed command indexes into the speed</span>
+<span class="sd">        command dict and calls the relevant processing method. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_cmd</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmd_name</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speed_cmd</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speed_commands</span><span class="p">[</span><span class="n">cmd_name</span><span class="p">](</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlightControl.control_altitude"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.control_altitude">[docs]</a>    <span class="k">def</span> <span class="nf">control_altitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; If there is an altitude command indexes into the altitude</span>
+<span class="sd">        command dict and calls the relevant processing method. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">altitude_cmd</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmd_name</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">altitude_cmd</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">altitude_commands</span><span class="p">[</span><span class="n">cmd_name</span><span class="p">](</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlightControl.control_direction"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.control_direction">[docs]</a>    <span class="k">def</span> <span class="nf">control_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; If there is a direction command indexes into the direction</span>
+<span class="sd">        command dict and calls the relevant processing method. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction_cmd</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmd_name</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction_cmd</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction_commands</span><span class="p">[</span><span class="n">cmd_name</span><span class="p">](</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlightControl.process_set_fly_level_cmd"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.process_set_fly_level_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">process_set_fly_level_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Processes a fly level command. This sets the desirec</span>
+<span class="sd">        pitch and roll angles to zero. Basically levels out the</span>
+<span class="sd">        wings of the aircraft. Originally we were setting the desired</span>
+<span class="sd">        yaw (psi) angle to zero as well. However this has the potential</span>
+<span class="sd">        to screw things up as it will change the direction the aircraft</span>
+<span class="sd">        is flying in. This is an undesired side-effect. Therefore better</span>
+<span class="sd">        to just fly straight and level. Pitch level and roll level.</span>
+<span class="sd">        I&#39;ve left it commented it to make it obvious.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">altitude_cmd</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;SetFlyLevelCmd&#39;</span><span class="p">)</span>
+        <span class="c1">#self.platform.yaw_cmd(0.0)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">pitch_cmd</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">roll_cmd</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlightControl.process_set_pitch_angle_cmd"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.process_set_pitch_angle_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">process_set_pitch_angle_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Processes the pitch angel command sending a pitch command</span>
+<span class="sd">        to the platform with the desired pitch angle theta_c. &quot;&quot;&quot;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">altitude_cmd</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;SetPitchAngleCmd&#39;</span><span class="p">)</span>
+        <span class="n">theta_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">altitude_cmd</span><span class="o">.</span><span class="n">theta_c</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">pitch_cmd</span><span class="p">(</span><span class="n">theta_c</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlightControl.process_set_altitude_cmd"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.process_set_altitude_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">process_set_altitude_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Processes the altitude command which takes a desired altitude,</span>
+<span class="sd">        and a desired pitch angle (theta_c) to either ascend or to</span>
+<span class="sd">        descend to that altitude. The method calculates the error zerr</span>
+<span class="sd">        in altitude. If we are within the altitude tolerance we simply</span>
+<span class="sd">        set the platform altitude to the desired altitude and level out</span>
+<span class="sd">        the pitch angle to 0.0. Otherwise we issue a pitch commmand</span>
+<span class="sd">        with the desired pitch angle (theta_c) to the platform.</span>
+
+<span class="sd">        Note that the platform can only control altitude through pitching</span>
+<span class="sd">        the nose up or down. If you want to descend and pitch your nose</span>
+<span class="sd">        up (or vice versa), you&#39;ll never get to your desired altitude.</span>
+
+<span class="sd">        That&#39;s a warning that the flight control system is not smart enough</span>
+<span class="sd">        to prevent the pilot agent from doing stupid things.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">altitude_cmd</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;SetAltitudeCmd&#39;</span><span class="p">)</span>
+        <span class="n">z_c</span><span class="p">,</span> <span class="n">theta_c</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">altitude_cmd</span><span class="o">.</span><span class="n">z_c</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">altitude_cmd</span><span class="o">.</span><span class="n">theta_c</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">z_c</span> <span class="o">=</span> <span class="n">z_c</span>
+        <span class="n">altitude_tolerance</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">dt</span>
+        <span class="n">zerr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">z_c</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">zerr</span> <span class="o">&lt;</span> <span class="n">altitude_tolerance</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">set_altitude</span><span class="p">(</span><span class="n">z_c</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">pitch_cmd</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">pitch_cmd</span><span class="p">(</span><span class="n">theta_c</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlightControl.process_set_speed_cmd"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.process_set_speed_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">process_set_speed_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Processes the speed command by telling the platform model the</span>
+<span class="sd">        desired speed v_c.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speed_cmd</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;SetSpeedCmd&#39;</span><span class="p">)</span>
+        <span class="n">v_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_cmd</span><span class="o">.</span><span class="n">v_c</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">speed_cmd</span><span class="p">(</span><span class="n">v_c</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlightControl.process_set_heading_cmd"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.process_set_heading_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">process_set_heading_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Processes the set heading command by telling the platform model</span>
+<span class="sd">        of the desired yaw command angle (psi_c)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction_cmd</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;SetHeadingCmd&#39;</span><span class="p">)</span>
+        <span class="n">psi_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction_cmd</span><span class="o">.</span><span class="n">psi_c</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">yaw_cmd</span><span class="p">(</span><span class="n">psi_c</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlightControl.process_set_heading_gload_cmd"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.process_set_heading_gload_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">process_set_heading_gload_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Process the set heading cmd with a desired g loading. &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction_cmd</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;SetHeadingGLoadCmd&#39;</span>
+        <span class="n">psi_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction_cmd</span><span class="o">.</span><span class="n">psi_c</span>
+        <span class="n">gload_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction_cmd</span><span class="o">.</span><span class="n">gload_c</span>
+        <span class="n">gload_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">gload_max</span>
+        <span class="n">gload_c</span> <span class="o">=</span> <span class="n">gload_max</span> <span class="k">if</span> <span class="n">gload_c</span> <span class="o">&gt;</span> <span class="n">gload_max</span> <span class="k">else</span> <span class="n">gload_c</span> 
+        <span class="n">phi_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">gload_c</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">yaw_cmd</span><span class="p">(</span><span class="n">psi_c</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">roll_cmd</span><span class="p">(</span><span class="n">phi_c</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlightControl.process_set_waypoint_cmd"><a class="viewcode-back" href="../../ace_zero.flight_control.html#ace_zero.flight_control.FlightControl.process_set_waypoint_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">process_set_waypoint_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes a set waypoint command which tells the aircraft</span>
+<span class="sd">        model to fly to a commanded waypoint (x_c, y_c).</span>
+<span class="sd">        Note that here we don&#39;t consider altitude. We control that separately.</span>
+<span class="sd">        The aircraft&#39;s current position is (x, y).</span>
+<span class="sd">        The difference in position (dx, dy) is calculated and then the</span>
+<span class="sd">        range/distance to the waypoint is calculated using NumPy&#39;s hypot</span>
+<span class="sd">        function (this is just Pythagoras).</span>
+<span class="sd">        If we haven&#39;t reached the waypoint, we calculate the desired</span>
+<span class="sd">        yaw angle (psi_c) using atan2 - this gives us the direction</span>
+<span class="sd">        we need fly. There is a conversion to degrees and also</span>
+<span class="sd">        a constraint to (0,360) degrees. Finally we issue the command</span>
+<span class="sd">        to underlying platform model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction_cmd</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;SetWaypointCmd&#39;</span><span class="p">)</span>
+        <span class="n">waypoint_tolerance</span> <span class="o">=</span> <span class="mf">10.0</span>
+        <span class="n">x_c</span><span class="p">,</span> <span class="n">y_c</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction_cmd</span><span class="o">.</span><span class="n">x_c</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction_cmd</span><span class="o">.</span><span class="n">y_c</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">x_c</span> <span class="o">-</span> <span class="n">x</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">y_c</span> <span class="o">-</span> <span class="n">y</span>
+        <span class="n">distance_to_wp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">distance_to_wp</span> <span class="o">&gt;</span> <span class="n">waypoint_tolerance</span><span class="p">:</span>
+            <span class="n">psi_c</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">constrain_360</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">dy</span><span class="p">,</span> <span class="n">dx</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">yaw_cmd</span><span class="p">(</span><span class="n">psi_c</span><span class="p">)</span></div></div>
+            <span class="c1">#print (t, x, y, x_c, y_c, self.platform.psi, psi_c)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

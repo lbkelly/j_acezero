@@ -1,0 +1,244 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.xcombat module &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ace_zero.xcombat module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>ace_zero.xcombat module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ace_zero.xcombat.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ace_zero.xcombat">
+<span id="ace-zero-xcombat-module"></span><h1>ace_zero.xcombat module<a class="headerlink" href="#module-ace_zero.xcombat" title="Permalink to this headline">¶</a></h1>
+<p>Exports the result of an ace_zero simulation to xcombat output for 3D visualisation.</p>
+<dl class="class">
+<dt id="ace_zero.xcombat.AircraftState">
+<em class="property">class </em><code class="descclassname">ace_zero.xcombat.</code><code class="descname">AircraftState</code><a class="reference internal" href="_modules/ace_zero/xcombat.html#AircraftState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.xcombat.AircraftState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>State of a single aircraft at a given instance in simulation time.</p>
+<dl class="method">
+<dt id="ace_zero.xcombat.AircraftState.update_state">
+<code class="descname">update_state</code><span class="sig-paren">(</span><em>t</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>psi</em>, <em>theta</em>, <em>phi</em>, <em>v</em>, <em>weight</em>, <em>fuel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/xcombat.html#AircraftState.update_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.xcombat.AircraftState.update_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.xcombat.Timeslice">
+<em class="property">class </em><code class="descclassname">ace_zero.xcombat.</code><code class="descname">Timeslice</code><a class="reference internal" href="_modules/ace_zero/xcombat.html#Timeslice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.xcombat.Timeslice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A timeslice consists of a list of aircraft states for the current simulation timestep.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.xcombat.XCombatRun">
+<em class="property">class </em><code class="descclassname">ace_zero.xcombat.</code><code class="descname">XCombatRun</code><a class="reference internal" href="_modules/ace_zero/xcombat.html#XCombatRun"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.xcombat.XCombatRun" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A history of a single simulation run.
+Consists of a header followed by a sequence of timeslices.</p>
+<dl class="method">
+<dt id="ace_zero.xcombat.XCombatRun.create_history_file">
+<code class="descname">create_history_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/xcombat.html#XCombatRun.create_history_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.xcombat.XCombatRun.create_history_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a history run file. The name of the file is automatically generated,
+and includes the date and time of generation.
+By default the run history files are generated in a folder called runs.
+If the folder doesn&#8217;t exist it is created.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.xcombat.XCombatRun.generate_run_history">
+<code class="descname">generate_run_history</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/xcombat.html#XCombatRun.generate_run_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.xcombat.XCombatRun.generate_run_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a history file for xcombat visualisation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.xcombat.XCombatRun.update_history">
+<code class="descname">update_history</code><span class="sig-paren">(</span><em>state_histories</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/xcombat.html#XCombatRun.update_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.xcombat.XCombatRun.update_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the list of fighter state histories into the xcombat format.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.xcombat.XCombatRun.update_traces">
+<code class="descname">update_traces</code><span class="sig-paren">(</span><em>traces</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/xcombat.html#XCombatRun.update_traces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.xcombat.XCombatRun.update_traces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a list of aircraft traces into the XCombat run format.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

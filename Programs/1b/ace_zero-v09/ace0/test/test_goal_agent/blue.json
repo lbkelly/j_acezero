@@ -1,0 +1,27 @@
+{
+    "callsign": "viper",
+    "id": 0,
+    "side": 1,
+    "actype": 0,
+    "metric" : "Imperial/Nautical",
+    "x": 1.0,
+    "y": 1.0,
+    "z": 15000.0,
+    "psi": 90.0,
+    "theta": 0.0,
+    "phi": 0.0,
+    "v": 150.0,
+    "weight": 100.0,
+    "fuel": 100.0,
+    "v_min": 100,
+    "v_max": 800,
+    "gload_max": 8.0,
+    "v_K": 0.01,
+    "theta_K": 0.005,
+    "psi_K": 10.0,
+    "sensor_params" : 
+    {
+        "sensor_max_range": 14.937365,
+        "sensor_fov": 270.0
+    }
+}

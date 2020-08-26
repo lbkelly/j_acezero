@@ -1,0 +1,24 @@
+{
+    "name" : "Stern Conversion, Goal Agent vs. Goal Agent",
+    "tmin" : 0.0,
+    "umpire" : {
+            "triggers" : [
+                    {   "class" : "umpires.triggers.MaxTimeElapsed",
+                        "parameters" : { "max_time" : 250.0 }
+                    }
+                ],
+            "critics" : []
+    },
+    "dt" : 0.1,
+    "blue" : {
+        "initial" : "test/test_goal_agent/blue.json",
+        "agent_class" : "agents.goal_agent.pilot.PilotAgent",
+        "agent_parameters": "test/test_goal_agent/goal_agent_blue_params.json"
+    },
+
+    "red" : {
+        "initial" : "test/test_goal_agent/red.json",
+        "agent_class" : "agents.goal_agent.pilot.PilotAgent",
+        "agent_parameters" : "test/test_goal_agent/goal_agent_red_params.json"
+    }
+}

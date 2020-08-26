@@ -1,0 +1,352 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.flight_control module &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ace_zero.flight_control module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>ace_zero.flight_control module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ace_zero.flight_control.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ace_zero.flight_control">
+<span id="ace-zero-flight-control-module"></span><h1>ace_zero.flight_control module<a class="headerlink" href="#module-ace_zero.flight_control" title="Permalink to this headline">¶</a></h1>
+<p>Flight Control Model</p>
+<p>The flight control model is the pilot&#8217;s interface to the aircraft platform
+dynamics model. The flight control contains a platform model and can
+process three types/families of commands.</p>
+<p>These are speed commands, altitude commands and direction commands.
+While in a real aircraft speed, altitude and direction are coupled through
+the equations of motion, in this model the aircraft is somewhat &#8216;arcadey&#8217;.</p>
+<p>We&#8217;ve decoupled the three types of controls allowing the pilot agent to set
+three independent command channels. Note that there are still some restrictions.
+The pilot cannot send two type of altitude commands at any given time step.</p>
+<p>The pilot can control the aircraft speed, altitude and direction independently.
+The tick method for the flight control class reflects this independence.</p>
+<dl class="class">
+<dt id="ace_zero.flight_control.FlightControl">
+<em class="property">class </em><code class="descclassname">ace_zero.flight_control.</code><code class="descname">FlightControl</code><span class="sig-paren">(</span><em>platform</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The flight control system is the pilot agent&#8217;s interface to the aircraft
+platform dynamics model. The class has a number of instance variables.
+- platform model
+- the current speed command
+- the current altitude command
+- the current direction command
+The class also contains three dictionaries that map the commands
+that are sent from the pilot into various methods which process
+these commands and intepret them for the platform dynamics model.</p>
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.control_altitude">
+<code class="descname">control_altitude</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.control_altitude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.control_altitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>If there is an altitude command indexes into the altitude
+command dict and calls the relevant processing method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.control_direction">
+<code class="descname">control_direction</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.control_direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.control_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>If there is a direction command indexes into the direction
+command dict and calls the relevant processing method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.control_speed">
+<code class="descname">control_speed</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.control_speed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.control_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>If there is a speed command indexes into the speed
+command dict and calls the relevant processing method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.get_platform_state">
+<code class="descname">get_platform_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.get_platform_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.get_platform_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a FighterState object with the state of the underlying
+platform model, including position, orientation and speed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.process_set_altitude_cmd">
+<code class="descname">process_set_altitude_cmd</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.process_set_altitude_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.process_set_altitude_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes the altitude command which takes a desired altitude,
+and a desired pitch angle (theta_c) to either ascend or to
+descend to that altitude. The method calculates the error zerr
+in altitude. If we are within the altitude tolerance we simply
+set the platform altitude to the desired altitude and level out
+the pitch angle to 0.0. Otherwise we issue a pitch commmand
+with the desired pitch angle (theta_c) to the platform.</p>
+<p>Note that the platform can only control altitude through pitching
+the nose up or down. If you want to descend and pitch your nose
+up (or vice versa), you&#8217;ll never get to your desired altitude.</p>
+<p>That&#8217;s a warning that the flight control system is not smart enough
+to prevent the pilot agent from doing stupid things.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.process_set_fly_level_cmd">
+<code class="descname">process_set_fly_level_cmd</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.process_set_fly_level_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.process_set_fly_level_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes a fly level command. This sets the desirec
+pitch and roll angles to zero. Basically levels out the
+wings of the aircraft. Originally we were setting the desired
+yaw (psi) angle to zero as well. However this has the potential
+to screw things up as it will change the direction the aircraft
+is flying in. This is an undesired side-effect. Therefore better
+to just fly straight and level. Pitch level and roll level.
+I&#8217;ve left it commented it to make it obvious.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.process_set_heading_cmd">
+<code class="descname">process_set_heading_cmd</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.process_set_heading_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.process_set_heading_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes the set heading command by telling the platform model
+of the desired yaw command angle (psi_c)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.process_set_heading_gload_cmd">
+<code class="descname">process_set_heading_gload_cmd</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.process_set_heading_gload_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.process_set_heading_gload_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the set heading cmd with a desired g loading.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.process_set_pitch_angle_cmd">
+<code class="descname">process_set_pitch_angle_cmd</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.process_set_pitch_angle_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.process_set_pitch_angle_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes the pitch angel command sending a pitch command
+to the platform with the desired pitch angle theta_c.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.process_set_speed_cmd">
+<code class="descname">process_set_speed_cmd</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.process_set_speed_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.process_set_speed_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes the speed command by telling the platform model the
+desired speed v_c.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.process_set_waypoint_cmd">
+<code class="descname">process_set_waypoint_cmd</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.process_set_waypoint_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.process_set_waypoint_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes a set waypoint command which tells the aircraft
+model to fly to a commanded waypoint (x_c, y_c).
+Note that here we don&#8217;t consider altitude. We control that separately.
+The aircraft&#8217;s current position is (x, y).
+The difference in position (dx, dy) is calculated and then the
+range/distance to the waypoint is calculated using NumPy&#8217;s hypot
+function (this is just Pythagoras).
+If we haven&#8217;t reached the waypoint, we calculate the desired
+yaw angle (psi_c) using atan2 - this gives us the direction
+we need fly. There is a conversion to degrees and also
+a constraint to (0,360) degrees. Finally we issue the command
+to underlying platform model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.set_altitude_cmd">
+<code class="descname">set_altitude_cmd</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.set_altitude_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.set_altitude_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the current altitude command to cmd</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.set_direction_cmd">
+<code class="descname">set_direction_cmd</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.set_direction_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.set_direction_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the current direction command to cmd</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.set_new_commands">
+<code class="descname">set_new_commands</code><span class="sig-paren">(</span><em>commands</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.set_new_commands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.set_new_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes new incoming commands according to the their cmd type.
+Note if there is more than one command for a given category,
+it will get over written by the last command in that category.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.set_speed_cmd">
+<code class="descname">set_speed_cmd</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.set_speed_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.set_speed_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the current speed command to cmd</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.flight_control.FlightControl.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/flight_control.html#FlightControl.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.flight_control.FlightControl.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ticks the flight control system every time step.
+Controls the speed, altitude and direction before ticking
+the underlying platform model.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

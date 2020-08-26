@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.agents.goal_agent.pilot module &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ace_zero.agents.goal_agent.pilot module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>ace_zero.agents.goal_agent.pilot module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ace_zero.agents.goal_agent.pilot.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ace_zero.agents.goal_agent.pilot">
+<span id="ace-zero-agents-goal-agent-pilot-module"></span><h1>ace_zero.agents.goal_agent.pilot module<a class="headerlink" href="#module-ace_zero.agents.goal_agent.pilot" title="Permalink to this headline">¶</a></h1>
+<p>Pilot Module</p>
+<p>Although this works, currently is incomplete:</p>
+<p>TODO:
+- Need to implement plans for all the commands we can issue
+- Need to add some higher level plans
+- Need to populate the PilotBeliefs class
+- Need to update the current plans so that the goals aren&#8217;t achieved as soon</p>
+<blockquote>
+<div>a command/action is issued.</div></blockquote>
+<dl class="class">
+<dt id="ace_zero.agents.goal_agent.pilot.FlyAltitude">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.goal_agent.pilot.</code><code class="descname">FlyAltitude</code><span class="sig-paren">(</span><em>agent</em>, <em>z_c</em>, <em>theta_c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#FlyAltitude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.FlyAltitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ace_zero.agents.goal_agent.pilot.Plan" title="ace_zero.agents.goal_agent.pilot.Plan"><code class="xref py py-class docutils literal"><span class="pre">ace_zero.agents.goal_agent.pilot.Plan</span></code></a></p>
+<p>A plan to fly to the specified altitude.</p>
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.FlyAltitude.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#FlyAltitude.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.FlyAltitude.tick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.agents.goal_agent.pilot.FlyHeading">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.goal_agent.pilot.</code><code class="descname">FlyHeading</code><span class="sig-paren">(</span><em>agent</em>, <em>heading</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#FlyHeading"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.FlyHeading" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ace_zero.agents.goal_agent.pilot.Plan" title="ace_zero.agents.goal_agent.pilot.Plan"><code class="xref py py-class docutils literal"><span class="pre">ace_zero.agents.goal_agent.pilot.Plan</span></code></a></p>
+<p>A plan to fly to the specified heading.</p>
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.FlyHeading.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#FlyHeading.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.FlyHeading.tick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.agents.goal_agent.pilot.FlyHeadingGLoad">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.goal_agent.pilot.</code><code class="descname">FlyHeadingGLoad</code><span class="sig-paren">(</span><em>agent</em>, <em>heading</em>, <em>gload</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#FlyHeadingGLoad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.FlyHeadingGLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ace_zero.agents.goal_agent.pilot.Plan" title="ace_zero.agents.goal_agent.pilot.Plan"><code class="xref py py-class docutils literal"><span class="pre">ace_zero.agents.goal_agent.pilot.Plan</span></code></a></p>
+<p>A plan to fly to the specified heading under a particular g-load factor.</p>
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.FlyHeadingGLoad.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#FlyHeadingGLoad.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.FlyHeadingGLoad.tick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.agents.goal_agent.pilot.FlyPitchAngle">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.goal_agent.pilot.</code><code class="descname">FlyPitchAngle</code><span class="sig-paren">(</span><em>agent</em>, <em>theta_c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#FlyPitchAngle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.FlyPitchAngle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ace_zero.agents.goal_agent.pilot.Plan" title="ace_zero.agents.goal_agent.pilot.Plan"><code class="xref py py-class docutils literal"><span class="pre">ace_zero.agents.goal_agent.pilot.Plan</span></code></a></p>
+<p>A plan to fly to the specified altitude.</p>
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.FlyPitchAngle.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#FlyPitchAngle.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.FlyPitchAngle.tick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.agents.goal_agent.pilot.PilotAgent">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.goal_agent.pilot.</code><code class="descname">PilotAgent</code><span class="sig-paren">(</span><em>params_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#PilotAgent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.PilotAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">agents.agent.Agent</span></code></p>
+<p>A class representing the pilot agent decision making.
+Each pilot has a name, a set of beliefs, a current goal, a list of current
+actions to send to the environment and a current missions (which is a queue
+of commands/actions)</p>
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.PilotAgent.add_action">
+<code class="descname">add_action</code><span class="sig-paren">(</span><em>action</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#PilotAgent.add_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.PilotAgent.add_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append action to the action list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.PilotAgent.add_mission">
+<code class="descname">add_mission</code><span class="sig-paren">(</span><em>mission</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#PilotAgent.add_mission"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.PilotAgent.add_mission" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new mission.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.PilotAgent.cobra_mission">
+<code class="descname">cobra_mission</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#PilotAgent.cobra_mission"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.PilotAgent.cobra_mission" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a mission profile for cobra pilot.
+The mission profile is a list of commands that the pilot
+should execute. It includes time delays between commands.
+Note that here we&#8217;ve hard code the mission into the code.
+The long term plan is to pull this out somehow into a data
+file (most likely a .json representation).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.PilotAgent.get_actions">
+<code class="descname">get_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#PilotAgent.get_actions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.PilotAgent.get_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current set of actions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.PilotAgent.get_commands">
+<code class="descname">get_commands</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#PilotAgent.get_commands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.PilotAgent.get_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current set of actions. Commands is a pseudonym for actions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.PilotAgent.set_beliefs">
+<code class="descname">set_beliefs</code><span class="sig-paren">(</span><em>beliefs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#PilotAgent.set_beliefs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.PilotAgent.set_beliefs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.PilotAgent.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#PilotAgent.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.PilotAgent.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ticks the agent every time step.
+Clears the previous set of actions.
+If we don&#8217;t have a goal or we have achieved the current goal and
+we still have stuff to do in our mission, get a new goal.
+Otherwise just tick the current goal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.PilotAgent.update_beliefs">
+<code class="descname">update_beliefs</code><span class="sig-paren">(</span><em>my_state</em>, <em>adversary_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#PilotAgent.update_beliefs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.PilotAgent.update_beliefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the pilot&#8217;s beliefs about it&#8217;s own and adversary state</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.PilotAgent.viper_mission">
+<code class="descname">viper_mission</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#PilotAgent.viper_mission"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.PilotAgent.viper_mission" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a mission profile for viper pilot.
+The mission profile is a list of commands that the pilot
+should execute. It includes time delays between commands.
+Note that here we&#8217;ve hard code the mission into the code.
+The long term plan is to pull this out somehow into a data
+file (most likely a .json representation).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.agents.goal_agent.pilot.PilotBeliefs">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.goal_agent.pilot.</code><code class="descname">PilotBeliefs</code><span class="sig-paren">(</span><em>entity_state=None</em>, <em>threat_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#PilotBeliefs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.PilotBeliefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A class capturing the pilot agent&#8217;s beliefs.
+TODO: we need to populate this with the pilots beliefs.</p>
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.PilotBeliefs.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>entity_state</em>, <em>threat_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#PilotBeliefs.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.PilotBeliefs.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.agents.goal_agent.pilot.Plan">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.goal_agent.pilot.</code><code class="descname">Plan</code><span class="sig-paren">(</span><em>agent</em>, <em>plan_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#Plan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.Plan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base class for an agent plan.</p>
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.Plan.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#Plan.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.Plan.tick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.agents.goal_agent.pilot.SetSpeed">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.goal_agent.pilot.</code><code class="descname">SetSpeed</code><span class="sig-paren">(</span><em>agent</em>, <em>speed</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#SetSpeed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.SetSpeed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ace_zero.agents.goal_agent.pilot.Plan" title="ace_zero.agents.goal_agent.pilot.Plan"><code class="xref py py-class docutils literal"><span class="pre">ace_zero.agents.goal_agent.pilot.Plan</span></code></a></p>
+<p>A plan to change the desired speed of the aircraft.</p>
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.SetSpeed.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#SetSpeed.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.SetSpeed.tick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ace_zero.agents.goal_agent.pilot.WaitFor">
+<em class="property">class </em><code class="descclassname">ace_zero.agents.goal_agent.pilot.</code><code class="descname">WaitFor</code><span class="sig-paren">(</span><em>agent</em>, <em>wait_time_seconds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#WaitFor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.WaitFor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ace_zero.agents.goal_agent.pilot.Plan" title="ace_zero.agents.goal_agent.pilot.Plan"><code class="xref py py-class docutils literal"><span class="pre">ace_zero.agents.goal_agent.pilot.Plan</span></code></a></p>
+<p>A plan to make the agent wait for specified number of seconds.</p>
+<dl class="method">
+<dt id="ace_zero.agents.goal_agent.pilot.WaitFor.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/agents/goal_agent/pilot.html#WaitFor.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.agents.goal_agent.pilot.WaitFor.tick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

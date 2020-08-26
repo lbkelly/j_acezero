@@ -1,0 +1,267 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.sensor module &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ace_zero.sensor module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>ace_zero.sensor module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ace_zero.sensor.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ace_zero.sensor">
+<span id="ace-zero-sensor-module"></span><h1>ace_zero.sensor module<a class="headerlink" href="#module-ace_zero.sensor" title="Permalink to this headline">¶</a></h1>
+<p>Sensor Model</p>
+<dl class="class">
+<dt id="ace_zero.sensor.Sensor">
+<em class="property">class </em><code class="descclassname">ace_zero.sensor.</code><code class="descname">Sensor</code><span class="sig-paren">(</span><em>name='Sensor'</em>, <em>max_range=19500.0</em>, <em>fov=30.0</em>, <em>s_x=0.0</em>, <em>s_y=0.0</em>, <em>s_z=0.0</em>, <em>s_psi=0.0</em>, <em>s_theta=0.0</em>, <em>s_phi=0.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#Sensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.Sensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A model of a sensor.</p>
+<dl class="method">
+<dt id="ace_zero.sensor.Sensor.convert_to_sensor_coordinates">
+<code class="descname">convert_to_sensor_coordinates</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#Sensor.convert_to_sensor_coordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.Sensor.convert_to_sensor_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the position of the entity to sensor coordinates.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.sensor.Sensor.get_state">
+<code class="descname">get_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#Sensor.get_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.Sensor.get_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current state of the sensor model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.sensor.Sensor.in_fov">
+<code class="descname">in_fov</code><span class="sig-paren">(</span><em>theta</em>, <em>phi</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#Sensor.in_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.Sensor.in_fov" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.sensor.Sensor.in_range">
+<code class="descname">in_range</code><span class="sig-paren">(</span><em>r</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#Sensor.in_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.Sensor.in_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.sensor.Sensor.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#Sensor.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.Sensor.tick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.sensor.Sensor.update_aircraft_state">
+<code class="descname">update_aircraft_state</code><span class="sig-paren">(</span><em>ac_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#Sensor.update_aircraft_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.Sensor.update_aircraft_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the aircraft&#8217;s position orientation that the sensor is attached to.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.sensor.Sensor.update_entities">
+<code class="descname">update_entities</code><span class="sig-paren">(</span><em>entities</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#Sensor.update_entities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.Sensor.update_entities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the list of entities to search through to see if we can see any of them.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ace_zero.sensor.Sensor.update_tracks">
+<code class="descname">update_tracks</code><span class="sig-paren">(</span><em>t</em>, <em>dt</em>, <em>entity</em>, <em>r</em>, <em>theta</em>, <em>phi</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#Sensor.update_tracks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.Sensor.update_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the track dictionary with the latest track.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="ace_zero.sensor.cartesian_to_spherical">
+<code class="descclassname">ace_zero.sensor.</code><code class="descname">cartesian_to_spherical</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#cartesian_to_spherical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.cartesian_to_spherical" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ace_zero.sensor.rotate_x">
+<code class="descclassname">ace_zero.sensor.</code><code class="descname">rotate_x</code><span class="sig-paren">(</span><em>angle</em>, <em>point</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#rotate_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.rotate_x" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ace_zero.sensor.rotate_y">
+<code class="descclassname">ace_zero.sensor.</code><code class="descname">rotate_y</code><span class="sig-paren">(</span><em>angle</em>, <em>point</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#rotate_y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.rotate_y" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ace_zero.sensor.rotate_z">
+<code class="descclassname">ace_zero.sensor.</code><code class="descname">rotate_z</code><span class="sig-paren">(</span><em>angle</em>, <em>point</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#rotate_z"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.rotate_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ace_zero.sensor.spherical_to_cartesian">
+<code class="descclassname">ace_zero.sensor.</code><code class="descname">spherical_to_cartesian</code><span class="sig-paren">(</span><em>r</em>, <em>theta</em>, <em>phi</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ace_zero/sensor.html#spherical_to_cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ace_zero.sensor.spherical_to_cartesian" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

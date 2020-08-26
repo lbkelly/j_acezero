@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ace_zero.test.test_system.test_initialisation &mdash; ace_zero  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ace_zero  documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> ace_zero
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../../index.html">ace_zero</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      
+    <li>ace_zero.test.test_system.test_initialisation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ace_zero.test.test_system.test_initialisation</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">unittest</span> <span class="k">import</span> <span class="n">TestCase</span>
+<span class="kn">import</span> <span class="nn">ace_zero</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<div class="viewcode-block" id="TestInitialisation"><a class="viewcode-back" href="../../../../ace_zero.test.test_system.test_initialisation.html#ace_zero.test.test_system.test_initialisation.TestInitialisation">[docs]</a><span class="k">class</span> <span class="nc">TestInitialisation</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Test ACE Zero initialisation including argument handling. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestInitialisation.setUp"><a class="viewcode-back" href="../../../../ace_zero.test.test_system.test_initialisation.html#ace_zero.test.test_system.test_initialisation.TestInitialisation.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Change working directory to the directory of this test so paths work</span>
+        <span class="n">abspath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+        <span class="n">dname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">dname</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestInitialisation.test_default_arguments"><a class="viewcode-back" href="../../../../ace_zero.test.test_system.test_initialisation.html#ace_zero.test.test_system.test_initialisation.TestInitialisation.test_default_arguments">[docs]</a>    <span class="k">def</span> <span class="nf">test_default_arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Tests that calling ACE Zero with no arguments produces the expected</span>
+<span class="sd">         default values. &quot;&quot;&quot;</span>
+        <span class="n">test_args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">expected_output</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;scenario&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;graph&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;critics&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                           <span class="s1">&#39;xcombat_path&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;noxcombat&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+        <span class="n">parsed_args</span> <span class="o">=</span> <span class="n">ace_zero</span><span class="o">.</span><span class="n">parse_arguments</span><span class="p">(</span><span class="n">test_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">parsed_args</span><span class="p">),</span> <span class="n">expected_output</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestInitialisation.test_arguments_parsed_correctly"><a class="viewcode-back" href="../../../../ace_zero.test.test_system.test_initialisation.html#ace_zero.test.test_system.test_initialisation.TestInitialisation.test_arguments_parsed_correctly">[docs]</a>    <span class="k">def</span> <span class="nf">test_arguments_parsed_correctly</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Tests that the command line arguments are parsed correctly. &quot;&quot;&quot;</span>
+        <span class="n">test_args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;--scenario&#39;</span><span class="p">,</span> <span class="s1">&#39;TestScenario&#39;</span><span class="p">,</span> <span class="s1">&#39;--graph&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;--noxcombat&#39;</span><span class="p">,</span> <span class="s1">&#39;--xcombat_path&#39;</span><span class="p">,</span> <span class="s1">&#39;TestPath&#39;</span><span class="p">,</span> <span class="s1">&#39;--critics&#39;</span><span class="p">]</span>
+        <span class="n">expected_output</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;scenario&#39;</span><span class="p">:</span> <span class="s1">&#39;TestScenario&#39;</span><span class="p">,</span> <span class="s1">&#39;graph&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="s1">&#39;xcombat_path&#39;</span><span class="p">:</span> <span class="s1">&#39;TestPath&#39;</span><span class="p">,</span> <span class="s1">&#39;critics&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="s1">&#39;noxcombat&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="n">parsed_args</span> <span class="o">=</span> <span class="n">ace_zero</span><span class="o">.</span><span class="n">parse_arguments</span><span class="p">(</span><span class="n">test_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">parsed_args</span><span class="p">),</span> <span class="n">expected_output</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestInitialisation.test_find_xcombat"><a class="viewcode-back" href="../../../../ace_zero.test.test_system.test_initialisation.html#ace_zero.test.test_system.test_initialisation.TestInitialisation.test_find_xcombat">[docs]</a>    <span class="k">def</span> <span class="nf">test_find_xcombat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Tests that the XCombat executable is found correctly in a</span>
+<span class="sd">        subdirectory. &quot;&quot;&quot;</span>
+        <span class="n">subdir</span> <span class="o">=</span> <span class="s2">&quot;test_find_xcombat_temp_directory&quot;</span>
+        <span class="n">xcombat_filename</span> <span class="o">=</span> <span class="s2">&quot;testxcombatfile.exe&quot;</span>
+
+        <span class="c1"># Get the absolute path to the test xcombat executable</span>
+        <span class="n">abspath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+        <span class="n">dname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">)</span>
+        <span class="n">subdir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dname</span><span class="p">,</span> <span class="n">subdir</span><span class="p">)</span>
+        <span class="n">xcombat_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">subdir_path</span><span class="p">,</span> <span class="n">xcombat_filename</span><span class="p">)</span>
+
+        <span class="c1"># Create a test xcombat executable in a subdirectory</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">subdir_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">subdir_path</span><span class="p">)</span>
+        <span class="nb">open</span><span class="p">(</span><span class="n">xcombat_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># Check that the test file is found correctly by find_xcombat()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">ace_zero</span><span class="o">.</span><span class="n">find_xcombat</span><span class="p">(),</span> <span class="n">xcombat_path</span><span class="p">)</span>
+
+        <span class="c1"># Remove the test file and directory</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">xcombat_path</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">subdir</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
